@@ -12,6 +12,8 @@ This reference explains the conventions used by `commit-msg`.
 - Write the subject in imperative mood such as `add`, `fix`, `refactor`,
   `update`, or `remove`.
 - Do not end the subject with a period.
+- For breaking changes, append `!` before the colon:
+  `feat(api)!: remove deprecated endpoint`
 
 ## Allowed Types
 
@@ -33,11 +35,12 @@ Preferred shape:
 ```text
 - bullet of what changed
 - bullet of why
+- (optional) bullet of impact or scope
 ```
 
 Guidelines:
 
-- Keep bullets factual and concise.
+- Keep bullets factual and concise (1–3 bullets total).
 - Focus on intent and impact, not line-by-line mechanics.
 - Avoid repeating the subject in different words.
 - Omit the body for small or obvious changes.

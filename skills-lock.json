@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "commit-msg": {
+      "source": "anhtuan23/skills",
+      "sourceType": "github",
+      "skillPath": "commit-msg/SKILL.md",
+      "computedHash": "f83fe6b03aa7c7bf32389062a80e6d2580098e6c4c93878fbaeba75cd81ebba1"
+    },
     "skill-creator": {
       "source": "anthropics/skills",
       "sourceType": "github",

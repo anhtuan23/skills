@@ -25,10 +25,14 @@ suggest one commit message for that change.
 
 5. Keep the subject under 60 characters, use imperative mood, and avoid ending
    it with a period.
-6. If the changes are complex, add a short body with exactly two bullets:
+6. For breaking changes, append `!` before the colon:
+   - `feat(api)!: remove deprecated endpoint`
+   - `refactor!: drop support for Node 14`
+7. If the changes are complex, add a short body with 1–3 bullets:
    - one bullet for what changed
    - one bullet for why
-7. If the changes are small or obvious, suggest only the subject line.
+   - (optional) one bullet for impact or scope
+8. If the changes are small or obvious, suggest only the subject line.
 
 ## Output Format
 
@@ -39,6 +43,7 @@ type(scope): short subject
 
 - bullet of what changed
 - bullet of why
+- (optional) bullet of impact or scope
 ```
 
 If the change is not complex, return only the subject line in the block.
