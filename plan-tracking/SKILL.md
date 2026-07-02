@@ -10,20 +10,58 @@ a plan, progress tracking, and structured reviews.
 
 ## Plan Structure
 
-Store all artifacts under `docs/plans/YYMMDD-HHMM-{short_descriptive_name}/`:
+Store all artifacts under `docs/plans/YYMM/DDHHMM-{short_descriptive_name}/`:
 use local time and a concise lowercase hyphenated name.
+
+The `YYMM` sub-folder (e.g. `2607/` for July 2026) groups plans by year-month
+so the top-level `docs/plans/` stays browsable.  The folder name itself uses
+`DDHHMM` since the year and month are already in the parent path.
 
 Required files:
 
 ```text
-docs/plans/YYMMDD-HHMM-{name}/
-├── plan.md          # source of truth
-├── progress.md      # current status for resumption
-└── review/
-    ├── 00-plan-review.md
-    ├── {NN}-slice-{name}.md
-    └── 99-completion-review.md
+docs/plans/YYMM/DDHHMM-{name}/
+├── plan.md              # source of truth
+├── progress.md          # current status for resumption
+├── review/
+│   ├── plan-01.md       # first plan review
+│   ├── plan-02.md       # second plan review (if needed)
+│   ├── slice-01-{name}.md
+│   ├── slice-02-{name}.md
+│   ├── completion-01.md # first completion review
+│   └── completion-02.md # second completion review (if needed)
+└── sub-plans/
+    └── DDHHMM-{sub-name}/  # same structure as main plan
 ```
+
+## Subplans
+
+During execution, new work may surface that should be done after the main plan
+completes.  Capture these as sub plans under a `sub-plans/` folder inside the main
+plan directory.
+
+- Name each sub plan folder `DDHHMM-{name}/` using the timestamp when it was
+  created (no `YYMM` subdivision — the parent plan already provides context).
+- Each sub plan contains the same files as the main plan: `plan.md`,
+  `progress.md`, and a `review/` folder with its own review rounds.
+- Create the `sub-plans/` folder only when the first sub plan is identified.
+
+```text
+docs/plans/YYMM/DDHHMM-{name}/
+└── sub-plans/
+    ├── DDHHMM-{sub-1}/
+    │   ├── plan.md
+    │   ├── progress.md
+    │   └── review/
+    └── DDHHMM-{sub-2}/
+        ├── plan.md
+        ├── progress.md
+        └── review/
+```
+
+Sub plans are independent units — each tracks its own progress and reviews.
+When the main plan references a sub plan, note it in `plan.md` with a link to
+the sub plan folder.
 
 ## Plan Creation
 
@@ -49,7 +87,8 @@ Keep `progress.md` current so future agents can resume.
 
 Review `plan.md` before implementation starts.
 
-- Create as `review/00-plan-review.md`
+- Create as `review/plan-{NN}.md` (start with `plan-01.md`)
+- If the plan is revised after review, create a new round (`plan-02.md`, etc.)
 - Cover: feasibility, risks, sequencing, missing assumptions, spec alignment
 - Include: reviewer identity, method, findings by severity, overall go/no-go
 
@@ -57,7 +96,7 @@ Review `plan.md` before implementation starts.
 
 Review a specific implementation commit after each slice is done.
 
-- Create as `review/{NN}-slice-{name}.md` (e.g. `review/01-slice-1-signing.md`)
+- Create as `review/slice-{NN}-{name}.md` (e.g. `review/slice-01-signing.md`)
 - Include:
   - Commit hash
   - Scope coverage table
@@ -80,14 +119,17 @@ Documents how findings from a slice review were addressed.
 
 Review the full implementation after all slices are done.
 
-- Create as `review/99-completion-review.md`
+- Create as `review/completion-{NN}.md` (start with `completion-01.md`)
+- If the implementation is revised after review, create a new round (`completion-02.md`, etc.)
 - Cover: end-to-end coherence across slices, remaining legacy artifacts, operational readiness
 - Include: final go/no-go for production cutover
 
 ## Workflow
 
 1. Before starting, check if a plan folder already exists for this work.
-2. If no plan exists, create one and ask the human to review before implementing.
+   Look under `docs/plans/YYMM/` for the current month and recent months.
+2. If no plan exists, create the `YYMM` sub-folder (if it doesn't exist yet)
+   and a `DDHHMM-{name}` folder inside it. Ask the human to review before implementing.
 3. For large plans, work in small reviewable, logical commit-sized steps.
 4. Complete one step, report it, announce the next intended step, then wait
    for the human to approve or edit before continuing.
@@ -101,3 +143,5 @@ Review the full implementation after all slices are done.
   review-gated work.
 - Skip slice reviews for low-risk changes; use plan review + completion review.
 - Always write a completion review when the plan had 3+ slices.
+- Create a sub plan when new work surfaces during execution that should follow
+  the main plan, not interrupt it.
