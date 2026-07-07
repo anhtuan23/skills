@@ -21,6 +21,7 @@ This skill defines the coding standards, language preferences, interactive envir
 - **Built-ins**: Avoid shadowing Python built-in names.
 - **Collections**: Prefer using standard built-in collection types (`dict`, `list`, `tuple`) directly instead of importing aliases from the `typing` module (e.g., use `list[str]` instead of `List[str]`).
 - **Type Hints**: Always use type hints for all function signatures, variable declarations, and class attributes to ensure clean, type-safe, and self-documenting code.
+- **Documentation**: Write descriptive docstrings for every function, method, and class to explain its purpose, parameters, and return values.
 
 ## Frameworks and Library Preferences
 
