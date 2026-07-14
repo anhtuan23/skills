@@ -7,6 +7,7 @@ Agent skills for OpenCode and compatible agents.
 | Skill | Description |
 |-------|-------------|
 | `commit-msg` | Suggest conventional commit messages for staged changes |
+| `complexity-combat` | Scan for over-engineered code, categorize, and ask human which problems are real before simplifying |
 | `plan-tracking` | Track implementation plans with structured progress and review artifacts |
 | `function-ordering` | Reorder functions within a file for better readability |
 | `module-refactor` | Split large modules into smaller focused files |
