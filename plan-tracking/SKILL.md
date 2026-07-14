@@ -63,11 +63,19 @@ Sub plans are independent units — each tracks its own progress and reviews.
 When the main plan references a sub plan, note it in `plan.md` with a link to
 the sub plan folder.
 
+## Writing Style
+
+Write all plan artifacts in clear, easy-to-understand language. Avoid jargon,
+ambiguous pronouns, and dense technical prose. Prefer short sentences, concrete
+examples, and explicit names over vague references. A future agent (or human)
+resuming work after days away should understand every line without needing to
+decode it.
+
 ## Plan Creation
 
 1. Create the plan folder with the timestamped name.
 2. Write `plan.md` with:
-   - Goal and scope
+   - Goal and scope — stated plainly so a newcomer can follow
    - Assumptions and constraints
    - Ordered implementation steps (slices)
    - Validation criteria for each slice
@@ -91,6 +99,7 @@ Review `plan.md` before implementation starts.
 - If the plan is revised after review, create a new round (`plan-02.md`, etc.)
 - Cover: feasibility, risks, sequencing, missing assumptions, spec alignment
 - Include: reviewer identity, method, findings by severity, overall go/no-go
+- Write findings in plain language — state the problem, why it matters, and what to do about it
 
 ### Slice Review
 
@@ -102,7 +111,7 @@ Review a specific implementation commit after each slice is done.
   - Scope coverage table
   - Validation run results
   - Technical correctness notes against specs
-  - Findings by severity
+  - Findings by severity — describe each issue plainly so someone unfamiliar with the code can understand it
   - Overall opinion
 
 ### Review Response
@@ -123,6 +132,7 @@ Review the full implementation after all slices are done.
 - If the implementation is revised after review, create a new round (`completion-02.md`, etc.)
 - Cover: end-to-end coherence across slices, remaining legacy artifacts, operational readiness
 - Include: final go/no-go for production cutover
+- State conclusions plainly — avoid hedging language that obscures the recommendation
 
 ## Workflow
 
