@@ -33,12 +33,35 @@ Begin by listing the outdated packages in the workspace or project directory usi
 
 ## 2. Researching Changelogs
 
-Before executing updates, research the changes between the installed version and the target version. Focus on:
+Before executing updates, read the changelogs (or release notes) for every version between the installed version and the target version. Go through **each changelog item one by one** and, for every item, work through three questions:
 
-1.  **Security Patches:** Prioritize upgrading packages with known CVEs (e.g., prototype pollution in Axios, memory safety issues, remote code execution).
-2.  **Breaking Changes:** Identify removals, API modifications, or major version updates that will break compilation or runtime behavior.
-3.  **Deprecations:** Document components, methods, or configurations scheduled for removal in future versions.
-4.  **Ecosystem Features:** Identify opportunities to apply new features or best practices introduced by the new versions.
+### For each changelog item
+
+1. **How does this affect the project?**
+   - Search the codebase for usages of the changed API, pattern, or configuration.
+   - Classify the impact: *breaking* (will fail at compile or runtime), *deprecation* (works now, will fail later), *behavior change* (subtly different output or side-effects), or *no impact* (internal change, unrelated feature, or fix for code we don't use).
+   - Note the exact files and lines that are affected.
+
+2. **How must the project be migrated?**
+   - If the item is breaking or deprecated, determine the replacement API or pattern.
+   - Write a concrete migration step: what to change, where, and to what.
+   - If the item changes default behavior (e.g., stricter validation, new option defaults), document what config or code must be added to preserve current behavior or to adopt the new default intentionally.
+
+3. **How can the project improve by using the new feature?**
+   - If the item introduces a new API, performance improvement, or best practice, evaluate whether adopting it would benefit this project.
+   - Consider: does it simplify existing code, improve performance, remove a workaround, or enable something previously difficult?
+   - Only flag adoption opportunities that are concrete and relevant — skip features that don't apply to this codebase.
+
+### Prioritization
+
+After going through all items, group findings by priority:
+
+1.  **Security Patches:** Prioritize upgrading packages with known CVEs (e.g., prototype pollution, memory safety issues, remote code execution).
+2.  **Breaking Changes:** Items that will cause compile or runtime failures — must be fixed during the upgrade.
+3.  **Deprecations:** Items that work now but will break in a future version — migrate now if practical, otherwise track as follow-up.
+4.  **New Feature Adoption:** Concrete opportunities to simplify or improve the codebase — adopt during the upgrade if low-risk, otherwise track as follow-up.
+
+Write all findings into the plan (or a dedicated analysis document) so the upgrade scope is explicit before implementation begins.
 
 ---
 
