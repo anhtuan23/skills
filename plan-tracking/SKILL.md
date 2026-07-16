@@ -76,6 +76,9 @@ decode it.
 1. Create the plan folder with the timestamped name.
 2. Write `plan.md` with:
    - Goal and scope — stated plainly so a newcomer can follow
+   - A simple overview — explain the end-to-end approach in 3–6 short steps,
+     including what happens now, what will change, and how the change fixes the
+     problem. Keep this understandable without reading the detailed slices.
    - Assumptions and constraints
    - Ordered implementation steps (slices)
    - Validation criteria for each slice
@@ -88,6 +91,10 @@ decode it.
 
 Keep `plan.md` as the source of truth. Update it when scope or sequence changes.
 Keep `progress.md` current so future agents can resume.
+
+When presenting a new or revised plan to the human, include the same simple
+overview in the response. Lead with the expected outcome, then summarize the
+flow in plain language before linking to the detailed plan artifacts.
 
 ## Review Types
 
