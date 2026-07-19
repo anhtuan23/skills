@@ -16,6 +16,7 @@ This skill defines the coding standards, language preferences, workspace configu
 ## Validation Flow
 
 Every Go change must pass validation and static analysis before completion:
-1. **Testing**: Run tests using `go test ./...`.
-2. **Linting**: Run static analysis using `golangci-lint run ./...`.
-3. **Sandboxed Cache Directory**: When running checks inside sandboxed environments, configure writable build caches such as `GOCACHE=/tmp/<project>-go-build-cache`.
+1. **Formatting**: Format every Go file in the relevant module with `golines -m 100 -w .`, then `gofumpt -w .`. Run these commands from that module's root; `./...` is a Go package pattern, not a formatter path.
+2. **Testing**: Run tests using `go test ./...`.
+3. **Linting**: Run static analysis using `golangci-lint run ./...`.
+4. **Sandboxed Cache Directory**: When running checks inside sandboxed environments, configure writable build caches such as `GOCACHE=/tmp/<project>-go-build-cache`.
