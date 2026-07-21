@@ -19,7 +19,7 @@ This skill defines the coding standards, language preferences, interactive envir
   - Use a single leading underscore for standard internal/private helper functions.
   - When a file has multiple levels of helper functions, use numbered private prefixes to denote helper hierarchy, e.g., `_2_my_helper()`, `_3_nested_helper()`.
 - **Built-ins**: Avoid shadowing Python built-in names.
-- **Imports**: Prefer explicit module imports over direct imports of functions, classes, or variables (e.g., use `import module` and `module.func()` instead of `from module import func`).
+- **Imports**: Prefer explicit module imports over direct imports of functions, classes, or variables (e.g., use `import module`, `from path import module`, and `module.func()` instead of `from module import func`).
 - **Collections**: Prefer using standard built-in collection types (`dict`, `list`, `tuple`) directly instead of importing aliases from the `typing` module (e.g., use `list[str]` instead of `List[str]`).
 - **Type Hints**: Always use type hints for all function signatures, variable declarations, and class attributes to ensure clean, type-safe, and self-documenting code.
 - **Documentation**: Write descriptive docstrings for every function, method, and class to explain its purpose, parameters, and return values.
