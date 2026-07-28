@@ -11,6 +11,7 @@ Agent skills for OpenCode and compatible agents.
 | `plan-tracking` | Track implementation plans with structured progress and review artifacts |
 | `function-ordering` | Reorder functions within a file for better readability |
 | `module-refactor` | Split large modules into smaller focused files |
+| `project-refactor` | Refactor a project around clear runtime flow and ownership |
 | `long-file-refactor` | Refactor long files into manageable pieces |
 
 ## Install
