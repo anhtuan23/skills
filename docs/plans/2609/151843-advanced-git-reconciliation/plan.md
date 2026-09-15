@@ -2,7 +2,7 @@
 
 ## TLDR
 
-Create a portable `advanced-git-reconciliation` skill for merge and rebase
+Create a portable `git-reconcile` skill for merge and rebase
 conflicts. It will preserve Hermes Agent's intent-reconciliation model, add
 real Git state and recovery safeguards, and teach agents to port behavior into
 the surviving architecture when a refactor makes a branch's original diff
@@ -12,7 +12,7 @@ files for merge, rebase, reconciliation, and recovery details.
 ## Goal and scope
 
 - Add a reusable, general Agent Skills-compatible skill under
-  `advanced-git-reconciliation/`.
+  `git-reconcile/`.
 - Cover merge, rebase, repeated rebase conflicts, interactive rebase,
   `--onto`, `--rebase-merges`, rerere, range-diff, and recovery.
 - Require base/history/intent reconstruction before non-trivial resolutions.
@@ -96,4 +96,4 @@ The classifications will be:
 Implementation starts only after human approval of this plan. After approval,
 the coordinator will create the skill, run validation, obtain an independent
 review, address material findings, and return the files plus limitations for
-final human review.
+final human review. The approved skill name is `git-reconcile`.

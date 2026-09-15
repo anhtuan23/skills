@@ -1,8 +1,11 @@
 # Progress
 
-- Status: awaiting plan approval
-- Active slice: 2 — write the skill
-- Completed: read-only research and design; no skill files edited
-- Next step: after approval, create `advanced-git-reconciliation/` and its
-  routed references
-- Blockers: human approval of the plan
+- Status: done — awaiting final human review
+- Active slice: 4 — independent final review
+- Completed: research and design; created `git-reconcile/SKILL.md` and four
+  routed references; added the root catalog entry; ran validation; completed
+  adversarial review; addressed all P1/P2 findings and the two follow-up P3
+  clarifications
+- Next step: human review of the resulting skill and its safety/recovery
+  guidance
+- Blockers: none

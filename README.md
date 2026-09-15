@@ -6,6 +6,7 @@ Agent skills for OpenCode and compatible agents.
 
 | Skill | Description |
 |-------|-------------|
+| `git-reconcile` | Reconcile advanced Git merge and rebase conflicts from base, intent, and behavioral evidence |
 | `commit-msg` | Suggest conventional commit messages for staged changes |
 | `complexity-combat` | Scan for over-engineered code, categorize, and ask human which problems are real before simplifying |
 | `plan-tracking` | Track implementation plans with structured progress and review artifacts |
