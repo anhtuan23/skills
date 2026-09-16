@@ -1,0 +1,10 @@
+{
+  "eval_id": 3,
+  "eval_name": "small-interface-information-hiding",
+  "prompt": "A reporting module exposes database models and query-builder details to five callers. Refactor the project so callers depend on a small stable reporting interface while keeping the current outputs and errors unchanged.",
+  "assertions": [
+    "Defines the observable contract and maps callers",
+    "Hides database details behind a justified stable interface",
+    "Preserves outputs and errors"
+  ]
+}

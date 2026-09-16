@@ -1,0 +1,10 @@
+{
+  "eval_id": 1,
+  "eval_name": "cross-module-dependency-boundaries",
+  "prompt": "Our checkout workflow is spread across API handlers, application services, domain code, and database adapters. Refactor the project so ownership is clearer and future pricing changes stay localized, but preserve current behavior. Before editing, explain the current runtime flow and propose the target module boundaries.",
+  "assertions": [
+    "Maps runtime flow and relevant dependency edges before editing",
+    "Uses cohesion, coupling, dependency direction, cycle risk, and interface boundaries",
+    "Requires approved plan before implementation"
+  ]
+}

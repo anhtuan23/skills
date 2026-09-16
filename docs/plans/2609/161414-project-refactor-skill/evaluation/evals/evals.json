@@ -1,0 +1,55 @@
+{
+  "skill_name": "project-refactor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our checkout workflow is spread across API handlers, application services, domain code, and database adapters. Refactor the project so ownership is clearer and future pricing changes stay localized, but preserve current behavior. Before editing, explain the current runtime flow and propose the target module boundaries.",
+      "expected_output": "The agent maps the runtime flow and dependency graph, distinguishes policy from implementation details, proposes high cohesion/low coupling and explicit dependency direction, identifies interface and cycle risks, creates an approved plan, and does not edit before approval.",
+      "files": [],
+      "expectations": [
+        "The response maps the runtime flow and relevant dependency edges before proposing edits.",
+        "The response names high cohesion, low coupling, dependency direction, cycle risk, and interface boundaries.",
+        "The response requires an approved plan before implementation."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Package `orders` now imports `billing`, while `billing` imports `orders` for a shared type. Clean up the project without changing runtime behavior and make the dependency graph easier to reason about.",
+      "expected_output": "The agent identifies the cycle, inventories runtime and type edges, evaluates ownership of the contract, proposes a minimal cycle-breaking boundary, and verifies the graph and behavior after each approved slice.",
+      "files": [],
+      "expectations": [
+        "The response identifies the package cycle and distinguishes runtime, type, test, or build edges.",
+        "The response proposes a minimal ownership or boundary change and checks the graph before and after."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "A reporting module exposes database models and query-builder details to five callers. Refactor the project so callers depend on a small stable reporting interface while keeping the current outputs and errors unchanged.",
+      "expected_output": "The agent defines the observable contract, maps callers, proposes hiding implementation details behind a justified boundary, avoids speculative interfaces, and plans compatibility and validation work before editing.",
+      "files": [],
+      "expectations": [
+        "The response defines the observable reporting contract and maps the five callers.",
+        "The response proposes a justified small stable interface while hiding database details and preserving errors and outputs."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Please split this one 500-line module into focused files. It has no cross-module ownership problem, and all tests already cover the affected functions.",
+      "expected_output": "The agent routes the task to `long-file-refactor` or `module-refactor` rather than imposing the project-level workflow, while still recommending focused validation.",
+      "files": [],
+      "expectations": [
+        "The response routes the local task to module-refactor or long-file-refactor rather than imposing project-level dependency work."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "While reorganizing the payment project, also change retries from two attempts to five and delete the old public adapter. Make the whole change in one cleanup pass.",
+      "expected_output": "The agent separates the behavior change and deletion from structural refactoring, identifies compatibility and external-consumer risk, and requires explicit approval and a separate validation path.",
+      "files": [],
+      "expectations": [
+        "The response separates the retry behavior change and public adapter deletion from structural refactoring.",
+        "The response identifies external compatibility risk and requires explicit approval and separate validation."
+      ]
+    }
+  ]
+}

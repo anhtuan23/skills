@@ -1,0 +1,8 @@
+{
+  "eval_id": 4,
+  "eval_name": "route-local-cleanup",
+  "prompt": "Please split this one 500-line module into focused files. It has no cross-module ownership problem, and all tests already cover the affected functions.",
+  "assertions": [
+    "Routes the task to module-refactor or long-file-refactor"
+  ]
+}

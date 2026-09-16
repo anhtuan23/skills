@@ -1,0 +1,9 @@
+{
+  "eval_id": 5,
+  "eval_name": "separate-behavior-change",
+  "prompt": "While reorganizing the payment project, also change retries from two attempts to five and delete the old public adapter. Make the whole change in one cleanup pass.",
+  "assertions": [
+    "Separates the retry behavior change and public adapter deletion",
+    "Identifies compatibility risk and requires explicit approval and separate validation"
+  ]
+}

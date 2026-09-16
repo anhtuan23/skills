@@ -2,13 +2,15 @@
 
 ## TLDR
 
-Strengthen `project-refactor` as a project-level, behavior-preserving workflow.
-The revised skill will map the real runtime flow and blast radius, establish a
-behavioral baseline when coverage is weak, require an approved on-disk plan for
-non-trivial restructuring, and execute small independently verified slices.
-It will replace universal style rules with evidence-based decisions and make
-the boundaries with `module-refactor`, `long-file-refactor`, and
-`complexity-combat` explicit.
+Strengthen `project-refactor` as a project-level, behavior-preserving workflow
+organized around dependency control: high cohesion and low coupling, explicit
+dependency direction, acyclic module graphs, and small stable interfaces that
+hide implementation details. The revised skill will map the real runtime flow
+and blast radius, establish a behavioral baseline when coverage is weak, require
+an approved on-disk plan for non-trivial restructuring, and execute small
+independently verified slices. It will replace universal style rules with
+evidence-based decisions and make the boundaries with `module-refactor`,
+`long-file-refactor`, and `complexity-combat` explicit.
 
 ## Goal and scope
 
@@ -17,6 +19,9 @@ the boundaries with `module-refactor`, `long-file-refactor`, and
 - Revise `project-refactor/SKILL.md` while keeping its name and directory.
 - Define the skill's ownership: cross-module or project-level restructuring,
   runtime-flow cleanup, and ownership-boundary changes.
+- Make dependency control the primary design lens: high cohesion/low coupling,
+  explicit dependency direction, the Acyclic Dependencies Principle, and
+  information hiding through small stable interfaces.
 - Add routing rules for bounded module work, long-file splitting, complexity
   diagnosis, feature work, bug fixes, migrations, and security-sensitive work.
 - Require evidence before changing structure: target, intended benefit, runtime
@@ -63,7 +68,9 @@ but its latest form is more prescriptive than its earlier version:
 The local sibling skills support a more conditional design: bounded module
 work belongs to `module-refactor`; long-file splitting belongs to
 `long-file-refactor`; and complexity candidates should be evidence-backed and
-human-decided under `complexity-combat`.
+human-decided under `complexity-combat`. The user's dependency-control notes
+will be the organizing theory for the revised workflow rather than an
+additional checklist at the end.
 
 ## Online research findings
 
@@ -120,6 +127,9 @@ Before proposing a target shape:
 - Name the exact target and the concrete benefit expected from restructuring.
 - Trace entrypoints, orchestration, state guards, side effects, persistence,
   external boundaries, lifecycle/concurrency behavior, and outputs.
+- Map the relevant dependency graph: modules/packages, runtime versus test/build
+  edges, permitted dependency directions, existing cycles, and the public
+  interfaces that cross each boundary.
 - Inventory direct and indirect callers, tests, configuration, docs, generated
   files, reflection/tag/template references, and wire/API contracts where
   relevant.
@@ -133,15 +143,40 @@ insufficient, add characterization tests or another explicit baseline before
 changing the structure. Record surprising behavior as behavior to preserve,
 not as an implicit bug fix.
 
-### 3. Design and approval gate
+### 3. Dependency-control design lens
+
+Use these four questions to judge the proposed structure:
+
+1. **Cohesion and locality** — Do related responsibilities change together for
+   a real reason, and will a normal change stay within a small boundary? Do not
+   group code by feature name alone if ownership, lifecycle, or change coupling
+   says another boundary is clearer.
+2. **Dependency direction** — Which layers or packages may depend on which
+   others? Keep policy and domain decisions independent of replaceable
+   implementation details when the project has that boundary. Put adapters at
+   the edge, but do not introduce Clean/Hexagonal/Onion layers without a real
+   dependency or change-isolation benefit.
+3. **Acyclic graph** — Does the target preserve or improve an acyclic module
+   graph? Identify every new edge and any cycle it creates. Break cycles at the
+   smallest meaningful ownership boundary rather than hiding them in a generic
+   shared package or adding speculative indirection.
+4. **Information hiding** — Is each boundary's public surface as small and
+   stable as practical? Keep implementation details private, expose contracts
+   rather than concrete details, and verify that an interface or compatibility
+   bridge has a real consumer, variation, or migration need.
+
+Record the baseline and target graph, the allowed edge directions, the cycles
+removed or intentionally retained, and the public-surface changes in the plan.
+
+### 4. Design and approval gate
 
 Choose the smallest structural change that addresses the named problem. Test
 each proposed abstraction, feature grouping, layer, class-to-function change,
 compatibility bridge, and deletion against current callers, ownership,
-framework/protocol requirements, lifecycle, safety, and likely change coupling.
-Feature organization is a useful default, not a universal law; retain a
-technical, domain, boundary, or lifecycle structure when it reduces coupling or
-protects a real contract.
+framework/protocol requirements, lifecycle, safety, likely change coupling,
+dependency direction, cycle risk, and interface size. Feature organization is
+a useful default, not a universal law; retain a technical, domain, boundary, or
+lifecycle structure when it improves cohesion or reduces coupling.
 
 For non-trivial, cross-module, public-surface, deletion, untested, or
 high-risk work, write an approved plan through `plan-tracking`. The plan must
@@ -154,7 +189,7 @@ Do not begin implementation until the human approves that plan. A plan is not
 permission to mix in unrelated bug fixes, feature work, or opportunistic
 cleanup.
 
-### 4. Execute in verified slices
+### 5. Execute in verified slices
 
 - Start from a known, recoverable baseline according to repository policy.
 - Make one coherent structural change at a time, preferably with mechanical or
@@ -162,6 +197,9 @@ cleanup.
 - Keep the public behavior and the recorded contract stable. Update production
   code, composition wiring, tests, docs, configuration, and dynamic references
   together.
+- After each structural slice, re-check dependency direction, cycle status,
+  change locality, and the boundary's public surface; a compiling refactor can
+  still make ownership or dependency propagation worse.
 - After each slice, run the focused checks and inspect the diff. Stop on an
   unexpected failure, reference, file, or behavior change; update the plan and
   ask for direction rather than improvising.
@@ -172,7 +210,7 @@ cleanup.
   effects, ordering, external contracts, or safety constraints; do not restate
   obvious code.
 
-### 5. Validate and report honestly
+### 6. Validate and report honestly
 
 Use a validation ladder appropriate to the repository and risk:
 
@@ -180,6 +218,12 @@ Use a validation ladder appropriate to the repository and risk:
 2. Affected package/module checks and characterization tests.
 3. Repository-wide tests, type checks, linters, builds, smoke tests, or
    benchmarks when the project exposes them and the risk warrants them.
+
+For dependency-control claims, compare the before/after graph or an equivalent
+repository-native report, check for new cycles, inspect imports/references that
+cross the boundary, and review the exported/public surface. Report improvement
+as structural evidence (for example, fewer cross-boundary edges or a removed
+cycle), not as a promise that future changes can never spread.
 
 Discover commands from the repository; never invent a command. Preserve the
 existing error, retry, transaction, cleanup, lifecycle, and concurrency
@@ -193,8 +237,9 @@ concise suggested commit message. Do not commit automatically.
 
 ## Ordered implementation slices
 
-1. **Revise `SKILL.md`** — replace the universal rules with the scoped workflow
-   above, add routing/stop rules, and keep the skill concise and portable.
+1. **Revise `SKILL.md`** — make dependency control the primary design lens,
+   replace the universal rules with the scoped workflow above, add routing/stop
+   rules, and keep the skill concise and portable.
 2. **Align `README.md`** — reduce duplicated prescriptions and point readers to
    the revised workflow; preserve only a short orientation and example where it
    remains accurate.
@@ -215,9 +260,16 @@ concise suggested commit message. Do not commit automatically.
   and does not over-trigger for local module or complexity-only work.
 - The skill names a target, intended benefit, non-goals, and evidence required
   before choosing a structure.
+- It treats high cohesion/low coupling, dependency direction, ADP, and
+  information hiding as design tests grounded in the repository's actual graph,
+  not slogans or mandatory Clean Architecture adoption.
 - It defines the observable contract and a characterization/baseline path when
   tests are inadequate.
 - It inventories cross-module and dynamic/external references when relevant.
+- It records dependency edges, permitted directions, cycle status, and public
+  surface changes for relevant project-level work.
+- It distinguishes runtime/package cycles from test/build/support edges and
+  requires any retained intentional cycle to be documented and contained.
 - It does not require feature folders, pure functions, diagrams, comments, or
   full-suite checks in cases where evidence does not justify them.
 - It requires human approval for non-trivial changes and stops on drift,

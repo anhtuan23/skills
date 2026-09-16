@@ -1,0 +1,10 @@
+{
+  "eval_id": 2,
+  "eval_name": "acyclic-package-graph",
+  "prompt": "Package `orders` now imports `billing`, while `billing` imports `orders` for a shared type. Clean up the project without changing runtime behavior and make the dependency graph easier to reason about.",
+  "assertions": [
+    "Identifies the cycle and distinguishes relevant edge types",
+    "Proposes a minimal ownership or boundary change",
+    "Checks the dependency graph before and after"
+  ]
+}
