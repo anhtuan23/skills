@@ -1,0 +1,8 @@
+{
+  "expectations": [
+    {"text": "The report identifies the external service boundary and treats the NetworkError handling as potentially intentional.", "passed": true, "evidence": "The report identifies client.fetch_profile as external and recommends keeping the logged NetworkError translation pending human decision."},
+    {"text": "The report does not call the null check accidental without contrary contract evidence.", "passed": true, "evidence": "The report explicitly says the null guard is not called accidental because the stated boundary permits null payloads."},
+    {"text": "The report remains read-only and asks for one human decision before proposing an edit.", "passed": true, "evidence": "The report records no edits and stops at the NetworkError candidate's four-way decision."}
+  ],
+  "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}
+}

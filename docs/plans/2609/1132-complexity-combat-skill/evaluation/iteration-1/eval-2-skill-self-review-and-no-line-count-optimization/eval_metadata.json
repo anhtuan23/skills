@@ -1,0 +1,6 @@
+{
+  "eval_id": 2,
+  "eval_name": "skill-self-review-and-no-line-count-optimization",
+  "prompt": "Review complexity-combat/SKILL.md itself for accidental complexity. Identify any redundant rule or structure only after explaining what it protects and whether it has a current caller or contract. Do not rewrite the skill or any other file. Present the candidate report and stop for my decision on the first candidate.",
+  "assertions": []
+}

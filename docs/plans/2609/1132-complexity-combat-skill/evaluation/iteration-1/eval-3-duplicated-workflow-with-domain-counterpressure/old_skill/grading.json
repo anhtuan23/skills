@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "The report distinguishes local module scope from broader project scope before recommending consolidation.", "passed": true, "evidence": "The old-skill report explains that module-refactor is local and project-refactor is broader, safety- and coordination-oriented."},
+    {"text": "The report identifies a concrete shape-based or policy-based candidate and explains its domain counterpressure.", "passed": false, "evidence": "The old-skill report inventories the stateless-class rule but stops at the earlier repeated-workflow candidate and does not develop that concrete candidate."},
+    {"text": "The report offers Keep, Simplify, Defer, and Escalate as the human decisions.", "passed": true, "evidence": "The first decision question lists all four states."},
+    {"text": "The report remains read-only and stops at the first candidate's decision.", "passed": true, "evidence": "The report states no edits were made and ends pending the first decision."}
+  ],
+  "summary": {"passed": 3, "failed": 1, "total": 4, "pass_rate": 0.75}
+}

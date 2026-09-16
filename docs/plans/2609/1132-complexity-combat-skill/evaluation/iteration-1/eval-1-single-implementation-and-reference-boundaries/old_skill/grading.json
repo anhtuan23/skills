@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "The report names a concrete candidate with file or symbol locations.", "passed": true, "evidence": "Candidate inventory names reference boundary split and repeated guidance across the git-reconcile files."},
+    {"text": "The report explains intended purpose and counter-evidence before recommending a disposition.", "passed": true, "evidence": "The report includes the problem being solved, evidence of cost, counter-evidence, and an assessment."},
+    {"text": "The report offers Keep, Simplify, Defer, and Escalate as the human decisions.", "passed": false, "evidence": "The old-skill report uses the original Yes/No/Maybe, not the four revised decision states."},
+    {"text": "The report remains read-only and stops for the first candidate's decision.", "passed": true, "evidence": "The report states no files were edited and stops pending the first decision."}
+  ],
+  "summary": {"passed": 3, "failed": 1, "total": 4, "pass_rate": 0.75}
+}

@@ -1,0 +1,6 @@
+{
+  "eval_id": 1,
+  "eval_name": "single-implementation-and-reference-boundaries",
+  "prompt": "Scan the git-reconcile skill directory for accidental complexity. Pay special attention to its multiple reference files, classifications, and any single-implementation abstraction. Report findings only; do not edit files. For the first candidate, explain the evidence, the counter-evidence, and ask me for one of the available decisions before continuing.",
+  "assertions": []
+}

@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "The report distinguishes local module scope from broader project scope before recommending consolidation.", "passed": true, "evidence": "The report distinguishes module-refactor's local file/API/test layout from project-refactor's end-to-end runtime and safety scope."},
+    {"text": "The report identifies a concrete shape-based or policy-based candidate and explains its domain counterpressure.", "passed": true, "evidence": "The first candidate is the blanket stateless-class rule, with interface, DI, polymorphism, lifecycle, and safety counterpressure."},
+    {"text": "The report offers Keep, Simplify, Defer, and Escalate as the human decisions.", "passed": true, "evidence": "The first decision question lists all four states."},
+    {"text": "The report remains read-only and stops at the first candidate's decision.", "passed": true, "evidence": "The report states no edits were made and ends at the first decision."}
+  ],
+  "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}
+}

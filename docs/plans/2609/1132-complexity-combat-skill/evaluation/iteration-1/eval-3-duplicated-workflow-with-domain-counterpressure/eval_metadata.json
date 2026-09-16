@@ -1,0 +1,6 @@
+{
+  "eval_id": 3,
+  "eval_name": "duplicated-workflow-with-domain-counterpressure",
+  "prompt": "Compare module-refactor/SKILL.md and project-refactor/SKILL.md for accidental duplication or over-engineering. Treat duplicated guidance as a candidate, not proof: check whether the two skills serve different scopes or safety contracts. Do not edit files. Give a prioritized report and ask for a keep, simplify, defer, or escalate decision one candidate at a time.",
+  "assertions": []
+}

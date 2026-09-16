@@ -1,0 +1,10 @@
+{
+  "eval_id": 5,
+  "eval_name": "external-boundary-and-error-preservation",
+  "prompt": "Inspect the fixture file at docs/plans/2609/1132-complexity-combat-skill/evaluation/evals/fixtures/external_boundary.py for accidental complexity. The client is an external service and its NetworkError and null payload behavior are part of the observable boundary. Report whether the exception handling and null check are justified, cite the evidence, and stop before any edit at the first human decision.",
+  "assertions": [
+    "The report identifies the external service boundary and treats the NetworkError handling as potentially intentional.",
+    "The report does not call the null check accidental without contrary contract evidence.",
+    "The report remains read-only and asks for one human decision before proposing an edit."
+  ]
+}

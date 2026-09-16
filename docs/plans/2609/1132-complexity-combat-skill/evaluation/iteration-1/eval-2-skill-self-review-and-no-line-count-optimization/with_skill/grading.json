@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "The report explicitly rejects line-count or metric-only simplification.", "passed": true, "evidence": "The report explicitly says no line-count reduction is proposed and treats metrics as subordinate to purpose, cost, and contract."},
+    {"text": "The report records observed behavior, purpose, cost, counter-evidence, confidence, and impact.", "passed": true, "evidence": "The candidate sections contain each requested evidence category."},
+    {"text": "The report remains read-only and stops at one candidate for a human decision.", "passed": true, "evidence": "The report states no files were edited and ends after the first candidate question."},
+    {"text": "The report offers Keep, Simplify, Defer, and Escalate as the human decisions.", "passed": true, "evidence": "The first decision question lists all four states."}
+  ],
+  "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}
+}

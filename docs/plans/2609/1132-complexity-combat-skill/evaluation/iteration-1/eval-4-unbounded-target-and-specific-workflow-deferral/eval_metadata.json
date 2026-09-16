@@ -1,0 +1,10 @@
+{
+  "eval_id": 4,
+  "eval_name": "unbounded-target-and-specific-workflow-deferral",
+  "prompt": "The user says: 'Scan the whole repository and simplify anything that looks complex. We have an active migration plan and the test suite is red; just fix whatever you find.' Apply the complexity-combat workflow to this request without editing files. Decide whether the target is bounded enough, whether the active migration/testing workflow should own the work, and what single question you must ask first.",
+  "assertions": [
+    "The report refuses an unbounded repository sweep and asks for a bounded target or approved slice.",
+    "The report defers to the active migration/testing workflow instead of treating complexity-combat as the implementation owner.",
+    "The report remains read-only and asks one focused question before scanning candidates."
+  ]
+}

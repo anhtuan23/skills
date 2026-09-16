@@ -1,0 +1,8 @@
+{
+  "expectations": [
+    {"text": "The report identifies the external service boundary and treats the NetworkError handling as potentially intentional.", "passed": true, "evidence": "The old-skill run identifies the external client and judges the NetworkError handling justified."},
+    {"text": "The report does not call the null check accidental without contrary contract evidence.", "passed": true, "evidence": "The old-skill run judges the null payload guard justified on the stated external-boundary evidence."},
+    {"text": "The report remains read-only and asks for one human decision before proposing an edit.", "passed": true, "evidence": "The report states no production or plan files were edited and stops at the first decision."}
+  ],
+  "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}
+}

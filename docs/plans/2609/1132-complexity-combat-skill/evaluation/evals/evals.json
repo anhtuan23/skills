@@ -1,0 +1,68 @@
+{
+  "skill_name": "complexity-combat",
+  "evals": [
+    {
+      "id": 1,
+      "name": "single-implementation-and-reference-boundaries",
+      "prompt": "Scan the git-reconcile skill directory for accidental complexity. Pay special attention to its multiple reference files, classifications, and any single-implementation abstraction. Report findings only; do not edit files. For the first candidate, explain the evidence, the counter-evidence, and ask me for one of the available decisions before continuing.",
+      "expected_output": "A report grounded in file/line evidence that distinguishes useful progressive disclosure and safety boundaries from speculative abstraction, then asks about exactly one candidate without editing.",
+      "assertions": [
+        "The report names a concrete candidate with file or symbol locations.",
+        "The report explains intended purpose and counter-evidence before recommending a disposition.",
+        "The report offers Keep, Simplify, Defer, and Escalate as the human decisions.",
+        "The report remains read-only and stops for the first candidate's decision."
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "skill-self-review-and-no-line-count-optimization",
+      "prompt": "Review complexity-combat/SKILL.md itself for accidental complexity. Identify any redundant rule or structure only after explaining what it protects and whether it has a current caller or contract. Do not rewrite the skill or any other file. Present the candidate report and stop for my decision on the first candidate.",
+      "expected_output": "The agent does not optimize merely for fewer lines; it records observed behavior, purpose, cost, counter-evidence, confidence, and a one-candidate human gate.",
+      "assertions": [
+        "The report explicitly rejects line-count or metric-only simplification.",
+        "The report records observed behavior, purpose, cost, counter-evidence, confidence, and impact.",
+        "The report remains read-only and stops at one candidate for a human decision.",
+        "The report offers Keep, Simplify, Defer, and Escalate as the human decisions."
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "duplicated-workflow-with-domain-counterpressure",
+      "prompt": "Compare module-refactor/SKILL.md and project-refactor/SKILL.md for accidental duplication or over-engineering. Treat duplicated guidance as a candidate, not proof: check whether the two skills serve different scopes or safety contracts. Do not edit files. Give a prioritized report and ask for a keep, simplify, defer, or escalate decision one candidate at a time.",
+      "expected_output": "A scoped comparison with evidence and counterpressure, explicit uncertainty where needed, and one-at-a-time decisions rather than an automatic consolidation.",
+      "assertions": [
+        "The report distinguishes local module scope from broader project scope before recommending consolidation.",
+        "The report identifies a concrete shape-based or policy-based candidate and explains its domain counterpressure.",
+        "The report offers Keep, Simplify, Defer, and Escalate as the human decisions.",
+        "The report remains read-only and stops at the first candidate's decision."
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "unbounded-target-and-specific-workflow-deferral",
+      "prompt": "The user says: 'Scan the whole repository and simplify anything that looks complex. We have an active migration plan and the test suite is red; just fix whatever you find.' Apply the complexity-combat workflow to this request without editing files. Decide whether the target is bounded enough, whether the active migration/testing workflow should own the work, and what single question you must ask first.",
+      "expected_output": "The agent refuses an unbounded sweep, defers to the active workflow, and asks one focused scoping question without editing.",
+      "assertions": [
+        "The report refuses an unbounded repository sweep and asks for a bounded target or approved slice.",
+        "The report defers to the active migration/testing workflow instead of treating complexity-combat as the implementation owner.",
+        "The report remains read-only and asks one focused question before scanning candidates."
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "external-boundary-and-error-preservation",
+      "prompt": "Inspect the fixture file at docs/plans/2609/1132-complexity-combat-skill/evaluation/evals/fixtures/external_boundary.py for accidental complexity. The client is an external service and its NetworkError and null payload behavior are part of the observable boundary. Report whether the exception handling and null check are justified, cite the evidence, and stop before any edit at the first human decision.",
+      "expected_output": "The agent recognizes the external boundary, treats the error and null handling as potentially intentional, and asks for a decision without editing.",
+      "assertions": [
+        "The report identifies the external service boundary and treats the NetworkError handling as potentially intentional.",
+        "The report does not call the null check accidental without contrary contract evidence.",
+        "The report remains read-only and asks for one human decision before proposing an edit."
+      ],
+      "files": ["docs/plans/2609/1132-complexity-combat-skill/evaluation/evals/fixtures/external_boundary.py"]
+    }
+  ]
+}

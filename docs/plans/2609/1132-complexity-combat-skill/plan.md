@@ -57,8 +57,9 @@ Comparable public skills consistently add safeguards missing from the current
 2. **Revise the entrypoint** — update only `complexity-combat/SKILL.md`, keeping
    it concise and portable.
 3. **Validate the skill** — check frontmatter, line count, internal structure,
-   `git diff --check`, and three realistic behavior-oriented evaluation prompts
-   against the old and revised versions when the evaluation harness is
+   `git diff --check`, and behavior-oriented evaluation prompts against the old
+   and revised versions, including unbounded-target, workflow-deferral, and
+   external-boundary/error-preservation cases when the evaluation harness is
    available.
 4. **Independent review** — review the completed skill for false positives,
    unsafe simplification advice, trigger drift, and unnecessary verbosity;
@@ -81,7 +82,8 @@ Comparable public skills consistently add safeguards missing from the current
   after a scan.
 - It defines what happens after keep/simplify/defer/escalate decisions and
   preserves a behavior-validation boundary for any later implementation.
-- The final diff contains only approved skill and plan/review artifacts.
+- The final diff contains only the approved skill, plan/review artifacts, and
+  the explicitly retained `evaluation/` validation artifacts.
 
 ## Risks and open questions
 

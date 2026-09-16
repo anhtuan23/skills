@@ -1,0 +1,8 @@
+{
+  "expectations": [
+    {"text": "The report refuses an unbounded repository sweep and asks for a bounded target or approved slice.", "passed": true, "evidence": "The report says the whole repository/anything complex request is not bounded and asks for an exact target or approved representative slice."},
+    {"text": "The report defers to the active migration/testing workflow instead of treating complexity-combat as the implementation owner.", "passed": true, "evidence": "The report explicitly assigns the work to the active migration/testing workflow and says complexity-combat is not authorized to make uncoordinated fixes."},
+    {"text": "The report remains read-only and asks one focused question before scanning candidates.", "passed": true, "evidence": "The report states no scan or edits occurred and ends with one focused target question."}
+  ],
+  "summary": {"passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0}
+}

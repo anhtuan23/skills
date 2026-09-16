@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "The report names a concrete candidate with file or symbol locations.", "passed": true, "evidence": "Candidate inventory names duplicated classification contract and cites git-reconcile/SKILL.md and references/conflict-reconciliation.md."},
+    {"text": "The report explains intended purpose and counter-evidence before recommending a disposition.", "passed": true, "evidence": "The candidate includes intended purpose, complexity/cost, counter-evidence, confidence, impact, and a narrow option."},
+    {"text": "The report offers Keep, Simplify, Defer, and Escalate as the human decisions.", "passed": true, "evidence": "The first decision question lists all four states."},
+    {"text": "The report remains read-only and stops for the first candidate's decision.", "passed": true, "evidence": "The report states no files were edited and ends pending the first decision."}
+  ],
+  "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}
+}
