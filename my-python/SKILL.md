@@ -32,13 +32,14 @@ This skill defines the coding standards, language preferences, interactive envir
   - Use plain Python loops only when simpler and when the data volume is small enough.
   - Always pass an explicit `schema` when creating production-path Polars DataFrames.
 
-## Interactive Mode & Files
+## Interactive Workflows
 
-- For new Python files, evaluate whether an interactive workflow is beneficial.
-- For interactive-friendly files, organize the logic as pure functions.
-- Add an `_interactive_setup()` function near the top of the file before other workflow functions so initialization runs first.
-- Flank each function header and docstring block with `# %%`.
-- Keep each function to a single final `return` statement, returning only simple processed data, and insert `# %%` immediately before the return.
+- For VS Code Python Interactive workflows using `# %%` cells, runtime import
+  paths, `_interactive_setup()`, and function-body exploration, follow the
+  `python-interactive` skill.
+- Keep interactive setup separate from ordinary module imports and make
+  function inputs explicit so code remains usable outside the Interactive
+  Window.
 
 ## Validation Flow
 

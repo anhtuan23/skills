@@ -12,7 +12,7 @@ return-statement boundaries, with examples adapted from
 
 ### In scope
 
-- Add `vscode-python-interactive/SKILL.md` with a clear trigger description and
+- Add `python-interactive/SKILL.md` with a clear trigger description and
   step-by-step workflow.
 - Update `my-python/SKILL.md` to route VS Code cell-based workflows to the new
   skill and avoid maintaining two overlapping sets of detailed instructions.
@@ -35,11 +35,18 @@ return-statement boundaries, with examples adapted from
 - VS Code's official Python Interactive documentation defines `# %%` cells,
   Run Cell/Run Above/Run Below, and interpreter selection:
   <https://code.visualstudio.com/docs/python/jupyter-support-py>
+- The Jupyter extension's default cell marker regex is anchored at column zero.
+  Body markers must start at the left edge; Python still ignores their
+  indentation as comments. The implementation source is
+  <https://github.com/microsoft/vscode-jupyter/blob/main/src/platform/common/constants.ts>.
 - VS Code runs a cell as a separate unit. A cell delimiter inside an indented
   function does not carry the function's local variables or call context into
   another cell. The skill must distinguish defining a complete function,
   experimenting with dedented body statements in the interactive kernel, and
   invoking the function normally.
+- Top-level `await` is Interactive Window input, not valid in an ordinary
+  Python module. Keep async setup invocation cells separate from importable
+  source code.
 - Prefer one final `return` when practical. Create the result before it and put
   `# %%` immediately before the return boundary. If control flow needs multiple
   returns, isolate each return boundary and explain that a `return` cannot be
@@ -55,7 +62,7 @@ return-statement boundaries, with examples adapted from
 
 ## Ordered implementation and review
 
-1. Create `vscode-python-interactive/SKILL.md` with the cell workflow,
+1. Create `python-interactive/SKILL.md` with the cell workflow,
    `sys.path` setup, `_interactive_setup()` gateway, function/body boundaries,
    return rules, and a complete annotated example.
 2. Add a short routing note to `my-python/SKILL.md` and list the new skill in
@@ -77,6 +84,8 @@ return-statement boundaries, with examples adapted from
   cell-based Python editing, including when the user does not say “skill.”
 - The example shows how to put the correct project import root on `sys.path`,
   define and call `_interactive_setup()`, and organize code using `# %%`.
+- Cell markers start at column zero, including boundaries inside function
+  bodies, so VS Code's default marker parser recognizes them.
 - It explains the limits of executing function-body selections and `return`
   statements as standalone cells without contradicting normal Python function
   execution.
@@ -89,4 +98,5 @@ return-statement boundaries, with examples adapted from
 
 ## Approval gate
 
-This plan is ready for human review. Implementation begins after approval.
+Approved by the user on 2026-09-27, with the skill name changed from
+`vscode-python-interactive` to `python-interactive`. Implementation may begin.

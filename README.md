@@ -11,6 +11,7 @@ Agent skills for OpenCode and compatible agents.
 | `complexity-combat` | Scan for over-engineered code, categorize, and ask human which problems are real before simplifying |
 | `plan-tracking` | Track implementation plans with structured progress and review artifacts |
 | `function-ordering` | Reorder functions within a file for better readability |
+| `python-interactive` | Set up Python files for cell-by-cell execution in VS Code's Interactive window |
 | `module-refactor` | Split large modules into smaller focused files |
 | `project-refactor` | Refactor a project around clear runtime flow and ownership |
 | `long-file-refactor` | Refactor long files into manageable pieces |
