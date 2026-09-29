@@ -75,7 +75,7 @@ module actually needs, and make their precedence explicit if package names
 could collide. Do not paste credentials into cells; load project configuration
 through its existing environment or settings mechanism.
 
-## Use `_interactive_setup()` as the setup gateway
+## Use `_setup_interactive()` as the setup gateway
 
 Keep environment loading and resource initialization in one clearly named
 function. Make setup safe to repeat where practical, and keep it separate from
@@ -91,7 +91,7 @@ resource.
 from app.common import config as common_config
 
 # %%
-async def _interactive_setup() -> None:
+async def _setup_interactive() -> None:
     """Load local configuration and initialize the interactive client."""
     global nats_client_
 
@@ -113,7 +113,7 @@ importable source module:
 from app.deviation.api import nats_api
 
 # %%
-await nats_api._interactive_setup()
+await nats_api._setup_interactive()
 
 # %%
 from zoneinfo import ZoneInfo
@@ -126,92 +126,99 @@ db_dates
 
 ## Organize definitions and function-body exploration
 
-- Put a column-zero `# %%` before each function header and after its body. A
-  header on its own is incomplete; executing a complete `def` defines the
-  function but does not execute its body.
+- In the callable-function layout, keep each complete function definition,
+  including its docstring and body, between top-level `# %%` markers. The cell
+  defines the function; call it from another cell to execute it.
 - Put `# %%` before each independent top-level setup, call, or inspection step.
-- If you put a `# %%` inside a function body, place the marker at column zero.
-  Python ignores the comment's indentation, while VS Code can recognize the
-  cell boundary.
-- To step through function logic in the Interactive Window, prepare its inputs
-  and required names in the kernel, then move the statement being explored into
-  a self-contained top-level cell. You can also extract the step into a helper
-  with explicit inputs and outputs and call it from a top-level cell.
-- A cell boundary inside a function does not preserve local variables,
-  arguments, or control flow across cells. Do not run a function-body fragment
-  and assume it is executing inside the function. Use a complete module import
-  and function call or the debugger with a breakpoint when local function
-  state matters.
+- In the body-stepping layout, put column-zero `# %%` markers between the
+  function header/docstring and body statements you want to explore. Prepare
+  the required local values as kernel variables and dedent selected body
+  statements before running them as top-level code. Keep each runnable branch
+  with its complete `if`/`elif`/`else` suite. A cell marker does not preserve
+  the function's local variables, arguments, or control flow; use the debugger
+  when those need to stay intact.
+- Prefer body cells without `return`. If a branch cell needs a visible
+  statement to be useful, assign or print/log the intermediate value in that
+  branch so the cell is valid without a `return`.
+- If an early `return` must stay with its branch, put the entire branch and its
+  `return` statement(s) in one cell labeled `[ignore]`. Never split
+  the branch header from its suite or separate the return from its branch.
+  That label is a reminder, not a VS Code execution guard. To execute the
+  function normally, import the complete module or run a complete function
+  definition cell, then call the function.
 
-There are two useful layouts. In a **callable-function layout**, put markers
-only outside a complete function so **Run Cell** defines it as one unit; use
-another top-level cell to call it. In a **body-stepping layout**, put inner
-markers at the statement boundaries you want to inspect. Those markers split
-the definition into cells, so do not use Run Cell or Run Above to define that
-partial function. Instead, import the source module from the Interactive
-Window; Python parses the entire module and treats `# %%` as comments. To
-execute individual body statements, move them to valid top-level cells after
-preparing their inputs.
+Use the callable-function layout when normal function calls are the goal:
+place markers outside the complete definition so **Run Cell** defines it as
+one unit, then use another top-level cell to call it. Use body-stepping cells
+only for statements that can be run with prepared inputs after dedenting.
 
 The Python extension also has a **Python: Run Selection/Line in Python
-Terminal** command. It removes common leading indentation from a selection,
-which can help send a function-body block to a REPL as top-level code. That
-command uses the Python terminal, not the Interactive Window kernel; choose it
-only when that separate REPL session is appropriate.
+Terminal** command. It removes common leading indentation from a selection;
+use it only for code that becomes valid top-level Python after dedenting, with
+any required local values prepared. It uses the Python terminal, not the
+Interactive Window kernel; choose it only when that separate REPL session is
+appropriate.
 
 ## Keep returns at function boundaries
 
-A `return` statement is valid only while executing a function. A cell that
-contains just `return result` cannot run as a top-level interactive cell. Keep
-the returned value visible before the return and put a `# %%` marker directly
-before the final return as a clear source boundary. This inner marker splits
-the function across VS Code cells: the preceding partial-definition cell will
-not include the return, and the return cell cannot run on its own. To call the
-function normally, import the source module from the Interactive Window, so
-Python parses the complete function with its return intact. To explore the
-body in pieces, run its statements as valid top-level cells and inspect the
-named value; do not run the return line by itself.
+A `return` statement is valid only inside a function. Prepare function-body
+cells in this order:
 
-Prefer one final return when that keeps the logic clear:
+1. First, redesign the function to use one final `return` when that keeps the
+   logic clear. Let each branch assign the value that the final return will
+   produce.
+2. For branch cells you want to run interactively, omit `return`. Keep the
+   branch and its full suite together, and add an assignment or `print`/log
+   statement so the cell is valid and its result is visible.
+3. If the function must keep an early return, put the entire branch together
+   with its `return` statement(s) in one `[ignore]` cell. Never split
+   an `if` header from its suite or a return branch from its return. Define and
+   call the complete function normally to execute that path.
 
-This source example stays valid Python. Because it has an inner marker before
-`return`, do not use **Run Cell** to define the function; import the containing
-module from the Interactive Window so Python reads the complete definition.
-The example function stands in for a function defined in the imported module.
+The first example refactors the function to one final return. Prepare `value`
+in the kernel. The assignment and branch cells can be selected, dedented, and
+run independently; the branch prints what it computed. The partial definition
+and final return cells are marked `[ignore]`. Import the complete module or
+run the complete definition to call the function normally. Treat the `print`
+calls as temporary exploration output; use the project's logger or remove
+them if normal calls should remain quiet.
 
 ```python
 # %%
-from datetime import date
+value = "  example  "
+
+# %% [ignore: partial function definition]
+def parse_optional_value(value: str | None) -> str | None:
+    """Return a stripped value, or None for missing input."""
+# %%
+    parsed_value = None
 
 # %%
-def retain_weekdays(dates: list[date]) -> list[date]:
-    """Return the supplied dates that fall on weekdays."""
-    result = [day for day in dates if day.weekday() < 5]
+    if value is None:
+        print(f"Parsed value: {parsed_value!r}")
+    else:
+        parsed_value = str(value).strip()
+        print(f"Parsed value: {parsed_value!r}")
 
-# %%
-    return result
+# %% [ignore: return requires function context]
+    return parsed_value
 
 # %%
 ```
 
-Create the result before the final return. When multiple returns are needed
-for clear control flow, put a `# %%` boundary immediately before each return
-and keep each branch understandable as part of the complete function. Each
-inner marker splits the definition into VS Code cells; import the containing
-module to define the whole function. Return cells remain non-runnable on their
-own.
+Create the returned value before the final return when that makes it easier to
+inspect or debug. When an early return must be preserved, keep the whole branch
+with its returns in one ignored cell:
 
 ```python
-# %%
-def parse_optional_value(value: str | None) -> str | None:
+# %% [ignore: partial function definition]
+def parse_optional_value_with_early_return(value: str | None) -> str | None:
+    """Return a stripped value, or None for missing input."""
+# %% [ignore: keep full branch and returns together]
     if value is None:
-# %%
         return None
-# %%
-
-    parsed_value = str(value).strip()
-# %%
-    return parsed_value
+    else:
+        return str(value).strip()
 
 # %%
 ```

@@ -35,7 +35,7 @@ This skill defines the coding standards, language preferences, interactive envir
 ## Interactive Workflows
 
 - For VS Code Python Interactive workflows using `# %%` cells, runtime import
-  paths, `_interactive_setup()`, and function-body exploration, follow the
+  paths, `_setup_interactive()`, and function-body exploration, follow the
   `python-interactive` skill.
 - Keep interactive setup separate from ordinary module imports and make
   function inputs explicit so code remains usable outside the Interactive
