@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vectorize"
+  short_description: "Prefer clear vectorized data transformations"
+  default_prompt: "Use $vectorize to refactor this data flow toward clear vectorized operations."
