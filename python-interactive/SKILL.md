@@ -73,17 +73,21 @@ When stepping through code in the Interactive Window, developers execute the bod
 of `_setup_interactive()` to initialize both the runtime connections and the
 parameter variables in the active kernel session.
 
-## 3. Standard 3-Boundary Function Structure (Indented Markers)
+## 3. Function Structure & Return Isolation (Indented Markers)
 
-To step through function logic easily while keeping standard Python syntax and
-clean git diffs, format callable functions using the standard 3-boundary pattern
-with **indented `# %%` markers**:
+`return` statements are only valid inside a function definition. Running a selection
+that contains a `return` keyword at the top-level kernel triggers:
+`SyntaxError: 'return' outside function`.
+
+### Preferred Pattern: Single Final Return
+
+Prefer structuring functions with **one final `return` statement** at the very end.
+Assign intermediate calculations or branch outputs to a result variable. This allows
+formatting with the standard **3-boundary pattern**:
 
 1. **Top-level cell marker** before the `def` header: `# %%`
 2. **Indented cell marker** immediately after the docstring (or header if no docstring): `    # %%`
-3. **Indented cell marker** immediately before the `return` statement: `    # %%`
-
-### Pattern
+3. **Indented cell marker** immediately before the final `return` statement: `    # %%`
 
 ```python
 # %%
@@ -111,15 +115,58 @@ async def get_current_balance_df(
     return balance_df
 ```
 
+Developers can highlight and run everything between the two indented `# %%` markers
+via **Shift+Enter** safely, as no `return` keyword is included in the runnable block.
+
+### Multiple or Early Returns: Isolation Rules
+
+When a function cannot reasonably be refactored to a single final return (e.g. guard
+clauses, early exit optimizations, or complex branching), isolate the return
+statements using indented `# %%` markers:
+
+1. **Separate Guard Returns from Main Body**:
+   Place an indented `# %%` after early guard exits so the downstream computational body
+   can still be executed independently:
+
+   ```python
+   # %%
+   def calculate_metrics(df: pl.DataFrame | None) -> dict[str, float]:
+       """Calculate summary metrics for the given DataFrame."""
+       if df is None or df.is_empty():
+           return {}
+       # %%
+       total_count = df.height
+       mean_value = float(df["value"].mean())
+       summary = {"count": total_count, "mean": mean_value}
+       # %%
+       return summary
+   ```
+
+2. **Branch Returns**:
+   If branches each contain their own `return`, place indented `# %%` markers around
+   the return statements or isolate each branch suite. When stepping through a branch,
+   assign the expression to a variable or execute only the assignment/computation line:
+
+   ```python
+   # %%
+   def evaluate_condition(score: float) -> str:
+       """Classify performance tier based on score."""
+       # %%
+       if score >= 90.0:
+           result = "Tier 1"
+           # %%
+           return result
+       # %%
+       result = "Standard"
+       # %%
+       return result
+   ```
+
 ### Why Indented Markers?
 
-- **Clean Isolation**: The indented `# %%` markers cleanly divide the function into three clear regions:
-  1. Function signature and documentation
-  2. Executable calculation logic (which uses the kernel variables prepared by `_setup_interactive()`)
-  3. Return statement
-- **Interactive Execution**: In VS Code, developers select the statements between the indented `# %%` markers and execute them directly via **Shift+Enter** (Run Selection in Interactive Window/Terminal) or run cells directly.
-- **Syntactic Validity**: Python treats `# %%` purely as a comment regardless of its indentation, so function definition and linting remain 100% compliant.
-- **Return Safety**: Isolating `return` after the second indented `# %%` prevents `SyntaxError: 'return' outside function` when sending the core body lines to the interactive kernel.
+- **Clean Isolation**: Indented `# %%` markers divide the code into runnable computation lines versus non-runnable boundaries (`def` header and `return`).
+- **Interactive Execution**: In VS Code, selecting statements between indented `# %%` markers and running them via **Shift+Enter** (Run Selection in Interactive Window/Terminal) works seamlessly.
+- **Syntactic Validity**: Python treats `# %%` purely as a comment regardless of indentation level; formatting and linting tools (`ruff`, `flake8`) remain completely valid.
 
 ## 4. Exploratory and Diagnostic Functions (`_plot_*`, `_analyze_*`)
 
@@ -154,5 +201,6 @@ async def _plot_journal_index() -> None:  # pragma: no cover
 
 - [ ] Path resolution block at top of file with `WORKSPACE_ROOT` / `PROJECT_ROOT` inserting into `sys.path`.
 - [ ] Setup gateway named `_setup_interactive()` handling config loading, connections, and representative default parameters.
-- [ ] Indented `# %%` markers placed immediately after function docstring and immediately before `return`.
+- [ ] Single final `return` preferred, with indented `# %%` markers placed immediately after docstring and before `return`.
+- [ ] If early/multiple returns exist, isolate `return` statements or guard exits with indented `# %%` boundaries.
 - [ ] Exploratory visualization or diagnostic helpers named `_plot_*` or `_analyze_*` with `# pragma: no cover`.
