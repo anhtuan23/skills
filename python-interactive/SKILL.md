@@ -4,7 +4,7 @@ description: >-
   Use whenever a user wants to prepare or edit a Python .py file for
   interactive execution in VS Code's Python Interactive window, including
   # %% cells, indented body markers, runtime sys.path setup, interactive setup
-  functions (_setup_interactive()), default parameter cells, or exploratory plotting.
+  functions (_setup_interactive()), parameter preparation, or exploratory plotting.
   Apply this skill even when they describe the workflow as running Python interactively.
 ---
 
@@ -42,31 +42,16 @@ import polars as pl
 ...
 ```
 
-## 2. Top-Level Default Inputs Cell
-
-To enable stepping through function bodies interactively without having to invoke
-the function with arguments, define representative default parameter variables at
-the module level inside a dedicated interactive cell:
-
-```python
-# %%
-user = "total"
-period = "annually"
-min_date = date(2025, 1, 1)
-max_date = date(2025, 12, 31)
-```
-
-When evaluating the function body interactively, these module-level variables
-serve as the input arguments in the kernel session.
-
-## 3. The `_setup_interactive()` Gateway
+## 2. The `_setup_interactive()` Gateway
 
 Encapsulate environment loading, external connections (such as NATS or databases),
-and mock data initialization in a standard private function named `_setup_interactive()`:
+and representative default parameter variables in a standard private function named
+`_setup_interactive()`:
 
 - Standard name: `_setup_interactive()` (asynchronous if using async clients like NATS).
 - Inside the function, place an indented `# %%` marker before the runnable body statements.
 - Tag with `# pragma: no cover` if test coverage reports require it.
+- **Representative Parameters & Fixtures**: Define sample parameters (e.g. `user`, `date`, `symbols`, test data paths) directly inside `_setup_interactive()` so executing its body populates kernel variables ready for function-body stepping without polluting global module scope during normal imports.
 
 ```python
 # %%
@@ -76,16 +61,19 @@ async def _setup_interactive() -> None:  # pragma: no cover
     import equity_shared.nats.client as nats_client
 
     nats_client_ = await nats_client.connect_nats()
-    return nats_client_
+
+    # Representative default parameters for stepping through worker functions
+    user = "total"
+    period = "annually"
+    min_date = date(2025, 1, 1)
+    max_date = date(2025, 12, 31)
 ```
 
-To run this in the Interactive Window or notebook interface:
-```python
-# %%
-nats_client_ = await _setup_interactive()
-```
+When stepping through code in the Interactive Window, developers execute the body
+of `_setup_interactive()` to initialize both the runtime connections and the
+parameter variables in the active kernel session.
 
-## 4. Standard 3-Boundary Function Structure (Indented Markers)
+## 3. Standard 3-Boundary Function Structure (Indented Markers)
 
 To step through function logic easily while keeping standard Python syntax and
 clean git diffs, format callable functions using the standard 3-boundary pattern
@@ -127,13 +115,13 @@ async def get_current_balance_df(
 
 - **Clean Isolation**: The indented `# %%` markers cleanly divide the function into three clear regions:
   1. Function signature and documentation
-  2. Executable calculation logic (which uses the kernel variables or default inputs defined in Step 2)
+  2. Executable calculation logic (which uses the kernel variables prepared by `_setup_interactive()`)
   3. Return statement
 - **Interactive Execution**: In VS Code, developers select the statements between the indented `# %%` markers and execute them directly via **Shift+Enter** (Run Selection in Interactive Window/Terminal) or run cells directly.
 - **Syntactic Validity**: Python treats `# %%` purely as a comment regardless of its indentation, so function definition and linting remain 100% compliant.
 - **Return Safety**: Isolating `return` after the second indented `# %%` prevents `SyntaxError: 'return' outside function` when sending the core body lines to the interactive kernel.
 
-## 5. Exploratory and Diagnostic Functions (`_plot_*`, `_analyze_*`)
+## 4. Exploratory and Diagnostic Functions (`_plot_*`, `_analyze_*`)
 
 In addition to core business logic, modules frequently include private exploratory
 or visualization functions designed for ad-hoc inspection and debugging:
@@ -150,7 +138,7 @@ async def _plot_journal_index() -> None:  # pragma: no cover
     # %%
     import plotly.express as px
 
-    nats_client_ = await _setup_interactive()
+    nats_client_ = await nats_client.connect_nats()
     journal_df = await repo.read_journal_index(nats_client_)
 
     fig = px.line(
@@ -165,7 +153,6 @@ async def _plot_journal_index() -> None:  # pragma: no cover
 ## Summary Checklist
 
 - [ ] Path resolution block at top of file with `WORKSPACE_ROOT` / `PROJECT_ROOT` inserting into `sys.path`.
-- [ ] Top-level `# %%` cells defining representative test parameters (`user`, `dates`, etc.).
-- [ ] Setup gateway named `_setup_interactive()` handling config loading and connection management.
+- [ ] Setup gateway named `_setup_interactive()` handling config loading, connections, and representative default parameters.
 - [ ] Indented `# %%` markers placed immediately after function docstring and immediately before `return`.
 - [ ] Exploratory visualization or diagnostic helpers named `_plot_*` or `_analyze_*` with `# pragma: no cover`.
