@@ -1,15 +1,17 @@
 ---
 name: domain-modeling
-description: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a GLOSSARY.md, or recording or editing an ADR.
+description: Build and sharpen a project's domain model. Use when discussing domain terminology, updating the project's designated context with domain language, or recording or editing an ADR.
 ---
 
 # Domain Modeling
 
-Actively build and sharpen the project's domain model as you design. This is the *active* discipline: challenging terms, inventing edge-case scenarios, and writing the glossary and decisions down the moment they crystallise. (Merely *reading* `GLOSSARY.md` for vocabulary is not this skill: that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
+Actively build and sharpen the project's domain model as you design. This is the *active* discipline: challenging terms, inventing edge-case scenarios, and recording resolved language and decisions as they crystallise. (Merely reading the project's context documentation for vocabulary is not this skill: that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
 
-## File structure
+## Find the project's context conventions
 
-Most repos have a single context:
+Before editing durable domain knowledge, read the applicable `AGENTS.md`, project context maps, and existing context and ADR files. Follow the repository's declared locations and formats. This includes conventions such as `AI_CONTEXT.md`, `CONTEXT.md`, or files under `docs/ai_context/`. Update those canonical files in place; do not create a parallel `GLOSSARY.md` or glossary map when the project already has a context system.
+
+Use the following glossary layout only when the repository has no context-file convention:
 
 ```
 /
@@ -21,7 +23,7 @@ Most repos have a single context:
 └── src/
 ```
 
-If a `GLOSSARY-MAP.md` exists at the root, the repo has multiple contexts. The map points to where each one lives:
+If a `GLOSSARY-MAP.md` exists at the root, the repo has multiple glossary contexts. The map points to where each one lives:
 
 ```
 /
@@ -37,13 +39,13 @@ If a `GLOSSARY-MAP.md` exists at the root, the repo has multiple contexts. The m
 │       └── docs/adr/
 ```
 
-Create files lazily: only when you have something to write. If no `GLOSSARY.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
+Create fallback files lazily: only when you have something to write. If no project context convention exists, create `GLOSSARY.md` when the first term is resolved. Follow the project's ADR location if it declares one; otherwise use `docs/adr/`, creating it when the first ADR is needed.
 
 ## During the session
 
-### Challenge against the glossary
+### Challenge the project's domain language
 
-When the user uses a term that conflicts with the existing language in `GLOSSARY.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y. Which is it?"
+When the user uses a term that conflicts with the project's existing context documentation, call it out immediately. "The project context defines 'cancellation' as X, but you seem to mean Y. Which is it?"
 
 ### Sharpen fuzzy language
 
@@ -57,11 +59,11 @@ When domain relationships are being discussed, stress-test them with specific sc
 
 When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible. Which is right?"
 
-### Update GLOSSARY.md inline
+### Update the canonical context inline
 
-When a term is resolved, update `GLOSSARY.md` right there. Don't batch these up: capture them as they happen. Use the format in [GLOSSARY-FORMAT.md](./GLOSSARY-FORMAT.md).
+When a term is resolved, update the project's designated context file right there. Don't batch these up: capture them as they happen, matching the existing structure and format. If the project explicitly uses `GLOSSARY.md`, use the format in [GLOSSARY-FORMAT.md](./GLOSSARY-FORMAT.md). If it has no context convention, use that format for the fallback `GLOSSARY.md`.
 
-`GLOSSARY.md` should be totally devoid of implementation details. Do not treat `GLOSSARY.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
+When updating a glossary, keep it devoid of implementation details. Do not treat a glossary as a spec, scratch pad, or repository for implementation decisions. If the project uses a broader context document, preserve its purpose and keep domain language in the relevant section.
 
 ### Offer ADRs sparingly
 
@@ -71,4 +73,4 @@ Only offer to create an ADR when all three are true:
 2. **Surprising without context**: a future reader will wonder "why did they do it this way?"
 3. **The result of a real trade-off**: there were genuine alternatives and you picked one for specific reasons
 
-If any of the three is missing, skip the ADR. Use the format in [ADR-FORMAT.md](./ADR-FORMAT.md).
+If any of the three is missing, skip the ADR. Follow the repository's ADR format and location if declared; otherwise use [ADR-FORMAT.md](./ADR-FORMAT.md) under `docs/adr/`.

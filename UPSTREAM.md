@@ -57,7 +57,9 @@ invocation policy, routing, metadata, or license changes:
 4. Preserve the local behavior: `grill-me` and `grill-with-docs` are eligible
    for implicit invocation, their existing Codex interface labels remain,
    and `ask-matt` routes temporary alignment to `grill-me` and durable project
-   decisions to `grill-with-docs`.
+   decisions to `grill-with-docs`. The local `domain-modeling` adaptation
+   follows each repository's declared context and ADR conventions, and must
+   not introduce a parallel glossary where a canonical context system exists.
 5. Validate the changed skill directories, inspect the complete diff, and
    confirm the upstream license and copyright notice remain present. Only then
    replace the recorded base SHA with `NEW_SHA`.
