@@ -1,6 +1,6 @@
 # Skills
 
-Agent skills for OpenCode and compatible agents.
+Agent skills for Codex, OpenCode, and compatible agents.
 
 ## Available Skills
 
@@ -15,6 +15,11 @@ Agent skills for OpenCode and compatible agents.
 | `module-refactor` | Split large modules into smaller focused files |
 | `project-refactor` | Refactor a project around clear runtime flow and ownership |
 | `long-file-refactor` | Refactor long files into manageable pieces |
+| `ask-matt` | Find the right skill or workflow |
+| `domain-modeling` | Build and sharpen a project's domain model |
+| `grill-me` | Interview the user when material choices remain |
+| `grill-with-docs` | Interview the user and record durable project decisions |
+| `grilling` | Interview the user to stress-test a plan, decision, or idea |
 
 ## Install
 
