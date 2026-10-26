@@ -3,14 +3,22 @@
 ## Before starting a merge
 
 Confirm the direction: the current branch is the branch that will receive the
-other branch. From a clean, intended worktree, record:
+other branch. Make sure all involved branches are up to date with their remotes
+before starting the merge: fetch latest tracking refs with `git fetch <remote>`
+and verify that neither `HEAD` nor `<other>` is behind its remote tracking branch.
+If either is behind, fast-forward or update it first.
+
+From a clean, intended worktree, record:
 
 ```text
+git fetch <remote>
 git status --long --branch
 git status --short --branch
 git branch --show-current
 git rev-parse HEAD
 git rev-parse --abbrev-ref --symbolic-full-name @{u}
+git rev-list --left-right --count HEAD...@{u}
+git rev-list --left-right --count <other>...<remote>/<other>
 git merge-base --all HEAD <other>
 git log --oneline --graph --decorate --all -n 30
 git diff --stat HEAD <other>

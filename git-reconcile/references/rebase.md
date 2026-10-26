@@ -6,6 +6,15 @@ single merge between two complete branch tips.
 
 ## Before starting or resuming
 
+Make sure branches are up to date with remote before starting a rebase. Fetch
+latest remote tracking refs with `git fetch <remote>` and verify that both the
+branch being rebased and the target upstream base branch are not behind their
+remote counterparts (e.g. `git rev-list --left-right --count HEAD...@{u}` and
+comparing the target upstream against its remote tracking branch). If either
+branch is behind, update or fast-forward it before rebasing so commits are not
+replayed against stale history. For an active or resumed rebase, check remote
+tracking status to detect if upstream moved since the rebase started.
+
 Record the original branch tip, branch name, upstream, target `--onto` commit,
 and a local recovery ref as described in [recovery.md](recovery.md). Establish
 a baseline when practical. Confirm the worktree is safe before starting a new

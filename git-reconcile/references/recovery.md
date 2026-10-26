@@ -6,14 +6,20 @@ cleanup step.
 
 ## Pre-operation snapshot
 
+Make sure branches are up to date with remote before rewriting history. Fetch
+latest remote tracking refs (`git fetch <remote>`) and verify that tracking
+status shows the branch is not behind (`git rev-list --left-right --count HEAD...@{u}`).
+
 Inspect without mutation:
 
 ```text
+git fetch <remote>
 git status --long --branch
 git status --short --branch
 git branch --show-current
 git rev-parse HEAD
 git rev-parse --abbrev-ref --symbolic-full-name @{u}
+git rev-list --left-right --count HEAD...@{u}
 git log --oneline --graph --decorate --all -n 30
 git reflog -n 10 HEAD
 git rev-parse --git-path MERGE_HEAD
