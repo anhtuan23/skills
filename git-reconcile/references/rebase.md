@@ -6,14 +6,22 @@ single merge between two complete branch tips.
 
 ## Before starting or resuming
 
-Make sure branches are up to date with remote before starting a rebase. Fetch
-latest remote tracking refs with `git fetch <remote>` and verify that both the
-branch being rebased and the target upstream base branch are not behind their
-remote counterparts (e.g. `git rev-list --left-right --count HEAD...@{u}` and
-comparing the target upstream against its remote tracking branch). If either
-branch is behind, update or fast-forward it before rebasing so commits are not
-replayed against stale history. For an active or resumed rebase, check remote
-tracking status to detect if upstream moved since the rebase started.
+Fetch the latest remote-tracking refs with `git fetch <remote>`, then verify
+that both the branch being rebased and the target base are current with their
+configured upstreams. A fetch updates remote-tracking refs; it does not move
+local branches.
+
+When the requested base is a local branch such as `main` and it is strictly
+behind its upstream, fast-forward the local branch with `git merge --ff-only
+<upstream>` before rebasing onto it. Confirm it has no unique commits (the
+local-versus-upstream count is `0 N`). Apply the same check to the source
+branch if it is behind its upstream. If either local branch has unique commits
+or has diverged from upstream, stop and reconcile rather than resetting it or
+silently substituting the remote-tracking ref. If the user explicitly selects
+a remote-tracking ref, use the fetched ref and state that the local branch
+remains unchanged. If a branch has no configured upstream, record that fact and
+do not infer one. For an active or resumed rebase, check remote-tracking status
+to detect if upstream moved since the rebase started.
 
 Record the original branch tip, branch name, upstream, target `--onto` commit,
 and a local recovery ref as described in [recovery.md](recovery.md). Establish
