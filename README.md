@@ -7,6 +7,7 @@ Agent skills for Codex, OpenCode, and compatible agents.
 | Skill | Description |
 |-------|-------------|
 | `git-reconcile` | Reconcile advanced Git merge and rebase conflicts from base, intent, and behavioral evidence |
+| `worktree-ship` | Develop in parallel worktrees, ship whole or partial features to main with rebase and --no-ff merge, deploy to production over SSH |
 | `commit-msg` | Suggest conventional commit messages for staged changes |
 | `complexity-combat` | Scan for over-engineered code, categorize, and ask human which problems are real before simplifying |
 | `plan-tracking` | Track implementation plans with structured progress and review artifacts |
