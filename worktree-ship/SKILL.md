@@ -46,7 +46,14 @@ is what production runs, so it must stay on a clean `main` (see deploy).
    Worktrees live in a sibling `<repo>-worktrees/` directory, never inside the
    main checkout (it holds large untracked data and would nest repos).
 3. Bootstrap per [bootstrap.md](references/bootstrap.md): untracked env and
-   secret files, data, dependencies. Report the path.
+   secret files, data, dependencies.
+4. Hand the user a session inside the worktree rather than a path to open:
+   - Claude Code: call `EnterWorktree` with `path` set to the new worktree
+     (it must be listed by `git worktree list`). `ExitWorktree` with `keep`
+     returns. A session already inside a worktree can only switch to
+     worktrees under `.claude/worktrees/`, so start each feature from the
+     main-checkout session.
+   - Any other agent: report the path.
 
 ### Ship everything in a worktree
 
