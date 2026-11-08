@@ -13,7 +13,7 @@ ask before creating anything.
 | `.env.local` | symlink, except on `air-m1` | on `air-m1` it sets `USE_PROD_DATA=true` and `USE_PROD_DNSE=true`; leave it absent there so the worktree defaults to development |
 | `secrets/`, `secrets_dev/` | symlink | never copy secrets |
 | `.venv` | do not share; `uv sync` in the worktree | per-branch dependencies |
-| `data_dev/` | symlink by default, only if it exists in the main checkout | development profile reads it; 100G, so never copy. `air-m1` has none, and a dangling link breaks profile loading |
+| `data_dev/` | symlink by default; create it in the main checkout first if absent | development profile reads it; 100G, so never copy. A dangling link breaks profile loading |
 | `data/` (production data) | never link | only the production checkout uses it |
 | `log/`, caches | leave absent | regenerated |
 | `.equity-local-runtime.lock` | do not link | a shared runtime lock would hide conflicts; run one local runtime at a time |
