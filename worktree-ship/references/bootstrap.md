@@ -10,7 +10,7 @@ ask before creating anything.
 | Item | Action | Why |
 | --- | --- | --- |
 | `.env` | tracked in git; nothing to link | the worktree has its own copy |
-| `.env.local` | symlink, except on `air-m1` | on `air-m1` it sets `USE_PROD_DATA=true` and `USE_PROD_DNSE=true`; leave it absent there so the worktree defaults to development |
+| `.env.local` | never link; create a new file in the worktree with `USE_PROD_DATA=false` and `USE_PROD_DNSE=false`, then copy any other non-switch lines from the main checkout's `.env.local` | it selects this checkout's data and DNSE profile; a link would share profile changes with the main checkout (production on `air-m1`) |
 | `secrets/`, `secrets_dev/` | symlink | never copy secrets |
 | `.venv` | do not share; `uv sync` in the worktree | per-branch dependencies |
 | `data_dev/` | symlink by default; create it in the main checkout first if absent | development profile reads it; 100G, so never copy. A dangling link breaks profile loading |
