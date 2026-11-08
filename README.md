@@ -1,6 +1,6 @@
 # Skills
 
-Agent skills for Codex, OpenCode, and compatible agents.
+Agent skills for Claude Code, Codex, OpenCode, and compatible agents.
 
 ## Available Skills
 
@@ -31,8 +31,22 @@ npx skills add anhtuan23/skills --skill <name>
 Install all skills:
 
 ```bash
-npx skills add anhtuan23/skills --all
+npx skills add anhtuan23/skills --skill '*' -a claude-code codex -y
 ```
+
+Name both tools, and run this from the project's main checkout:
+
+- `codex` puts the real copies in `.agents/skills`, which Codex, OpenCode, and
+  Antigravity read. `claude-code` then adds a link to each in `.claude/skills`.
+  Naming only `claude-code` creates separate copies instead.
+- `--all` also installs for every other tool the CLI knows, such as Eve's
+  `agent/skills` folder.
+- Links created from a worktree point through its path, so they break when the
+  worktree is removed.
+
+`skills-lock.json` does not record which tools get a skill, so restoring from it
+does not recreate the `.claude/skills` links. Name the tools again on a new
+machine.
 
 ## Update
 

@@ -18,5 +18,5 @@ This skill defines the coding standards, language preferences, workspace configu
 Every Go change must pass validation and static analysis before completion:
 1. **Formatting**: Format every Go file in the relevant module with `golangci-lint fmt`. The workspace root `.golangci.yml` owns `gofumpt`, `goimports`, and 100-column `golines` formatting.
 2. **Testing**: Run tests using `go test ./...`.
-3. **Linting**: Run static analysis using `golangci-lint run ./...`.
+3. **Linting**: Run static analysis using `golangci-lint run ./...` from a module root. A `go.work` root is not a module, so list each module's path there, or use the project's documented command.
 4. **Sandboxed Cache Directory**: When running checks inside sandboxed environments, configure writable build caches such as `GOCACHE=/tmp/<project>-go-build-cache`.
