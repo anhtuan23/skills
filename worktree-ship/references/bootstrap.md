@@ -9,10 +9,11 @@ ask before creating anything.
 
 | Item | Action | Why |
 | --- | --- | --- |
-| `.env`, `.env.local` | symlink to main checkout | one source of truth |
+| `.env` | tracked in git; nothing to link | the worktree has its own copy |
+| `.env.local` | symlink, except on `air-m1` | on `air-m1` it sets `USE_PROD_DATA=true` and `USE_PROD_DNSE=true`; leave it absent there so the worktree defaults to development |
 | `secrets/`, `secrets_dev/` | symlink | never copy secrets |
 | `.venv` | do not share; `uv sync` in the worktree | per-branch dependencies |
-| `data_dev/` | symlink by default | development profile reads it; 100G, so never copy |
+| `data_dev/` | symlink by default, only if it exists in the main checkout | development profile reads it; 100G, so never copy. `air-m1` has none, and a dangling link breaks profile loading |
 | `data/` (production data) | never link | only the production checkout uses it |
 | `log/`, caches | leave absent | regenerated |
 | `.equity-local-runtime.lock` | do not link | a shared runtime lock would hide conflicts; run one local runtime at a time |
@@ -21,7 +22,9 @@ Rules:
 
 - Symlinks must be ignored by git; check `git status` afterwards. If a link
   shows up untracked, add it to `.git/info/exclude`, not to `.gitignore`.
-- Never run production runtime (`IS_PROD=true`) from a worktree.
+- Never run with `USE_PROD_DATA=true` or `USE_PROD_DNSE=true` from a
+  worktree; both select production state (data root, or real DNSE trading
+  and its secrets).
 - Two worktrees must not run services against the same `data_dev` at once;
   concurrent writers can corrupt it. Linking is safe, running twice is not.
 - On removal (`git worktree remove`), remove symlinks only; never follow them
