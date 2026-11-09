@@ -5,7 +5,7 @@ Goal: ship selected commits of `<feature>` while the rest keeps developing.
 ## Prepare the history
 
 1. Back up: `git branch backup/<feature>-<date> <feature>`.
-2. List commits: `git log --oneline main..<feature>`. Classify each as ship,
+2. List commits: `git fetch origin && git log --oneline origin/main..<feature>`. Classify each as ship,
    keep, or mixed. Ask the user to confirm the split when it is not obvious.
 3. A commit that mixes shipped and kept changes must be split first
    (`git rebase -i` with `edit`, then `git reset HEAD^` and re-commit in
@@ -17,15 +17,15 @@ Goal: ship selected commits of `<feature>` while the rest keeps developing.
 
 ## Ship
 
-1. `git worktree add ~/projects/<repo>-worktrees/<feature>-release -b <feature>-release origin/main`
-   (after fetching and fast-forwarding `main`).
+1. `git worktree add ~/projects/<repo>-worktrees/<feature>-release -b <feature>-release --no-track origin/main`
+   (after `git fetch origin`), then bootstrap it per [bootstrap.md](bootstrap.md).
 2. `git cherry-pick <shipped SHAs in original order>`. Conflicts: `git-reconcile`.
 3. Run tests on this branch alone; this is the code production will run.
-4. Merge `<feature>-release` into `main` with `--no-ff`, then `git push origin main`.
+4. Merge `<feature>-release` and push it, as in "Push to main" in `SKILL.md`.
 
 ## Realign the remainder
 
-1. In the feature worktree: `git rebase main`. Git drops cherry-picked commits
+1. In the feature worktree: `git fetch origin && git rebase origin/main`. Git drops cherry-picked commits
    that are patch-identical; if one survives as a duplicate, skip it, after
    confirming the content already exists on `main`.
 2. Conflicts: `git-reconcile`. Re-run tests.

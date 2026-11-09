@@ -7,7 +7,7 @@ checkout, propose the list, and ask before creating anything.
 
 Rules:
 
-- Never copy secrets. Link them.
+- Never copy secrets. Link development secrets, and never link production ones.
 - Do not share a virtual environment. Create one per worktree.
 - Never give a worktree a link to production data or a production profile.
 - Symlinks must be ignored by git; check `git status` afterwards. If a link
