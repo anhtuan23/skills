@@ -17,9 +17,8 @@ recording it there. Do not invent it.
 2. Inspect production (read-only):
    `git status --short --branch && git rev-parse HEAD`, over SSH if you are on
    another machine. Stop and report if the main checkout is dirty, on a branch
-   other than `main`, or has an active merge/rebase. Do not clean it up, unless
-   the project's rules describe that exact case. Feature work on that machine
-   belongs in its worktrees.
+   other than `main`, or has an active merge/rebase. Do not clean it up. Feature
+   work on that machine belongs in its worktrees.
 3. `git fetch origin && git pull --ff-only origin main`. A non-fast-forward
    means production diverged: stop and report. Never reset, stash, or force.
 4. The SHA from step 2 is the previous SHA; keep it for the report.
@@ -33,13 +32,11 @@ recording it there. Do not invent it.
 
 On restart or health failure, report output and the previous SHA. Do not roll back
 automatically; propose the project's rollback, and let the user choose. If it has
-none, revert what the deploy brought in a temporary worktree, as in "Push to main"
-in `SKILL.md`: newest first, with `git revert -m 1 <SHA>` for a merge commit and
+none, revert what the deploy brought on `main`, newest first, with `git revert -m 1 <SHA>` for a merge commit and
 `git revert <SHA>` for any other commit.
 
 ## Safety
 
 - Non-interactive SSH only; if a password/host-key prompt appears, stop.
-- In the production machine's main checkout, run only status, fetch, ff-only pull,
-  the project's restart procedure, its health checks, and any cleanup its rules
-  describe. Temporary worktrees on that machine are fine.
+- In the production machine's main checkout, never reset, stash, or force. Feature
+  work on that machine belongs in its worktrees.

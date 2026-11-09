@@ -21,7 +21,7 @@ Goal: ship selected commits of `<feature>` while the rest keeps developing.
    (after `git fetch origin`), then bootstrap it per [bootstrap.md](bootstrap.md).
 2. `git cherry-pick <shipped SHAs in original order>`. Conflicts: `git-reconcile`.
 3. Run tests on this branch alone; this is the code production will run.
-4. Merge `<feature>-release` and push it, as in "Push to main" in `SKILL.md`.
+4. Merge `<feature>-release` and push it, as in "Ship everything" in `SKILL.md`.
 
 ## Realign the remainder
 

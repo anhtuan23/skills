@@ -56,9 +56,10 @@ production runs, so it must stay on a clean `main` (see deploy).
 1. In the worktree: clean status, tests green. `git fetch origin`.
 2. `git rebase origin/main` in the worktree. Conflicts: invoke `git-reconcile`.
 3. Re-run tests on the rebased branch.
-4. Merge and push from a temporary worktree, as described under "Push to main".
-5. On a machine that does not run production, update the main checkout with
-   `git pull --ff-only origin main`. On the production machine, leave it alone.
+4. In the main checkout (clean, on `main`): `git pull --ff-only origin main`,
+   then `git merge --no-ff <feature>`.
+5. `git push origin main`. If rejected (remote moved), do not force: run
+   `git pull --rebase=merges origin main` and push again.
 6. Offer deploy. Remove the worktree and branch only when asked.
 
 ### Ship part of a worktree
@@ -70,35 +71,10 @@ of release; the remainder stays in the worktree and is rebased over the result.
 
 Read [deploy.md](references/deploy.md).
 
-### Push to main
-
-Never merge or commit for `main` in a main checkout. On the production machine,
-a new `HEAD` is what services run after a restart, so that checkout moves only
-through a pull the project's rules allow. Use one temporary detached worktree for
-each operation, on every machine. It runs nothing, so it needs no bootstrap.
-
-```bash
-git fetch origin
-git merge-base --is-ancestor origin/main <feature>   # If this fails, main moved: go back to "Ship everything" step 2
-git worktree add --detach ~/projects/<repo>-worktrees/push-<feature> origin/main
-cd ~/projects/<repo>-worktrees/push-<feature>
-git merge --no-ff -m "Merge branch '<feature>'" <feature>
-git push origin HEAD:main
-git rev-parse HEAD && git ls-remote origin main   # The two SHAs must match
-```
-
-Once they match, leave the folder and run `git worktree remove` on it. Never
-remove it, or check out another commit in it, before then.
-
-If the push is rejected (remote moved), do not force. Remove the folder with
-`git worktree remove --force`, go back to "Ship everything" step 2, and start
-this section again. If the merge stops on a conflict, run `git merge --abort` and
-invoke `git-reconcile`.
-
 ## Preconditions checklist
 
-Before any merge or push: no active merge/rebase/cherry-pick in the worktree
-being shipped; tests run on the exact rebased commits; recovery ref recorded
+Before any merge or push: no active merge/rebase/cherry-pick; main checkout
+clean; tests run on the exact rebased commits; recovery ref recorded
 (`git branch backup/<feature>-<date> <feature>`).
 
 ## Report
