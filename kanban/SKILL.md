@@ -14,12 +14,12 @@ context.
 
 ```text
 kanban.md
-├── ## 🚧 In Progress   tasks someone is working on now
-├── ## ⏸️ On Hold       paused until a set date or event
+├── ## 🚧 Doing         tasks someone is working on now
+├── ## 📅 Scheduled     paused until a set date or event
 ├── ## 📋 To Do         tasks ready to start, including deferred findings
 ├── ## 🚫 Blocked       waiting with no known resume time
 ├── ## ✅ Done          tasks completed this month
-└── ## 💰 Not worth it  tasks dropped after a decision, with the reason
+└── ## 🗑️ Dropped       tasks dropped after a decision, with the reason
 docs/kanban/YYYY-MM.md  completed tasks from earlier months
 ```
 
@@ -51,23 +51,23 @@ lives on `main`, and a worktree copy goes stale.
   together.
 - **To Do items** need the summary, origin, and enough context to act on later.
   `Where` and `Resume` are optional until work starts.
-- **In Progress items** must have `Where` and `Resume`. Link the plan folder
+- **Doing items** must have `Where` and `Resume`. Link the plan folder
   when one exists (see the `plan-tracking` skill).
-- **On Hold and Blocked items** must have a `Waiting on` line and a `Revisit`
+- **Scheduled and Blocked items** must have a `Waiting on` line and a `Revisit`
   line, and keep `Where` and `Resume` if work had started:
   - `Waiting on:` the one thing that stops the next step, such as a user
     decision, a market event, an upstream fix, or another item. Name it so
     anyone can check whether it has happened.
   - `Revisit:` a date (`YYYY-MM-DD`) or a checkable trigger, such as "after
     the 2027-02-15 index review" or "when `[trader]` buffer item is Done".
-- **On Hold or Blocked:** On Hold means the resume time is set in advance:
+- **Scheduled or Blocked:** Scheduled means the resume time is set in advance:
   `Revisit` is a date, or an event with a known date, such as the next ATO or
   a scheduled index review. Blocked means waiting with no known resume time,
   such as a vendor change or an upstream fix; its `Revisit` is a trigger you
   can check, not a date. When a Blocked item's trigger gets a date, move it to
-  On Hold. When an On Hold item reaches its date and still cannot resume,
+  Scheduled. When a Scheduled item reaches its date and still cannot resume,
   set a new date or move it to Blocked.
-- Use To Do, not On Hold or Blocked, when nothing stops the task and it only
+- Use To Do, not Scheduled or Blocked, when nothing stops the task and it only
   lacks time.
 
 ## Lifecycle
@@ -75,49 +75,49 @@ lives on `main`, and a worktree copy goes stale.
 ```mermaid
 stateDiagram-v2
     [*] --> ToDo: create (deferred finding or new task)
-    [*] --> InProgress: create and start now
-    ToDo --> InProgress: start
-    InProgress --> InProgress: status update
-    InProgress --> ToDo: pause, nothing blocks it
-    InProgress --> OnHold: resume time set
-    InProgress --> Blocked: no resume time
+    [*] --> Doing: create and start now
+    ToDo --> Doing: start
+    Doing --> Doing: status update
+    Doing --> ToDo: pause, nothing blocks it
+    Doing --> Scheduled: resume time set
+    Doing --> Blocked: no resume time
     ToDo --> Blocked: blocked before starting
-    OnHold --> Blocked: date passed, still stuck
-    Blocked --> OnHold: trigger gets a date
-    OnHold --> InProgress: cleared
-    Blocked --> InProgress: cleared
+    Scheduled --> Blocked: date passed, still stuck
+    Blocked --> Scheduled: trigger gets a date
+    Scheduled --> Doing: cleared
+    Blocked --> Doing: cleared
     Blocked --> ToDo: cleared, not starting now
-    InProgress --> Done: complete
-    ToDo --> NotWorthIt: drop, with the reason
-    Blocked --> NotWorthIt: drop, with the reason
+    Doing --> Done: complete
+    ToDo --> Dropped: drop, with the reason
+    Blocked --> Dropped: drop, with the reason
     Done --> Archive: next month
 ```
 
 1. **Create.** When you find work outside the current task, such as a bug, a
    risk, or a follow-up you are deferring, add it to To Do without asking.
    Name it in your final response.
-2. **Start.** Move the item to In Progress, add `started`, `Where`, and
-   `Resume`. Any task you work on needs an In Progress item, even one you
+2. **Start.** Move the item to Doing, add `started`, `Where`, and
+   `Resume`. Any task you work on needs a Doing item, even one you
    created a minute ago.
 3. **Update.** When the state changes, such as a plan written, waiting on the
    human, merged, or deployed, edit the item's `Status` line in place and bump
    `updated`. Keep only the current status plus the facts a resumer needs.
    History belongs in the plan's `progress.md` and in git.
 4. **Pause or wait.** If you stop without finishing, keep `Resume` exact. If
-   something stops the task, move it to On Hold or Blocked with `Waiting on`
-   and `Revisit`, and add `on hold since` or `blocked since` to the stamps. Otherwise move it back to To Do.
+   something stops the task, move it to Scheduled or Blocked with `Waiting on`
+   and `Revisit`, and add `scheduled since` or `blocked since` to the stamps. Otherwise move it back to To Do.
 5. **Complete.** Move the item to the top of Done. Shrink it to a summary of
    the outcome: what shipped (merge SHA), whether it is deployed, and the plan
    link. Add `completed`.
-6. **Drop.** Move a task you decide not to do to Not worth it, with a
-   `Not worth it (timestamp):` line that says why.
+6. **Drop.** Move a task you decide not to do to Dropped, with a
+   `Dropped (timestamp):` line that says why.
 
 ## Choosing What to Do Next
 
 Run `hostname`, then read the Machines section of
 `docs/ai_context/operations.md` to learn what this machine usually does.
-Scan On Hold, then Blocked, first: if an item's `Waiting on` has happened or its `Revisit`
-date has passed, move it to To Do or In Progress, or bump `Revisit` with the
+Sca Scheduled, then Blocked, first: if an item's `Waiting on` has happened or its `Revisit`
+date has passed, move it to To Do or Doing, or bump `Revisit` with the
 reason. Then prefer To Do items that fit this machine, and items other items
 depend on.
 
