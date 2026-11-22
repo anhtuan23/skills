@@ -26,12 +26,17 @@ directly in the Interactive Window without depending on working directory:
 from pathlib import Path
 import sys
 
-WORKSPACE_ROOT = Path("/Users/kaestrl/projects/equity")
-PROJECT_ROOT = WORKSPACE_ROOT / "<service_dir>"
+# Derive the root from this file so a worktree imports its own code.
+# N is the number of folders between this file and the service root.
+PROJECT_ROOT = Path(__file__).resolve().parents[N]
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 ```
+
+Never hard-code an absolute checkout path: it puts the main checkout first on
+`sys.path`, so tests in a worktree silently import main's code. If the file needs
+the workspace root, use `WORKSPACE_ROOT = PROJECT_ROOT.parent`.
 
 Follow this immediately with standard imports in the next cell:
 
@@ -251,7 +256,7 @@ This provides reliable verification without modifying production code or relying
 
 ## Summary Checklist
 
-- [ ] Path resolution block at top of file with `WORKSPACE_ROOT` / `PROJECT_ROOT` inserting into `sys.path`.
+- [ ] Path resolution block at top of file with `PROJECT_ROOT` derived from `__file__` inserting into `sys.path`.
 - [ ] Setup gateway named `_setup_interactive()` handling config loading, connections, and representative default parameters.
 - [ ] Single final `return` preferred, with indented `# %%` markers placed immediately after docstring and before `return`.
 - [ ] If early/multiple returns exist, isolate `return` statements or guard exits with indented `# %%` boundaries.
