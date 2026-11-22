@@ -16,7 +16,8 @@ context.
 kanban.md
 ├── ## 🚧 In Progress   tasks someone is working on now
 ├── ## 📋 To Do         tasks ready to start, including deferred findings
-├── ## ⏳ Waiting       tasks that cannot continue until something happens
+├── ## ⏸️ On Hold       short pauses: started work waiting days, not weeks
+├── ## 🚫 Blocked       long pauses: waiting weeks or more, or on an outside party
 ├── ## ✅ Done          tasks completed this month
 └── ## 💰 Not worth it  tasks dropped after a decision, with the reason
 docs/kanban/YYYY-MM.md  completed tasks from earlier months
@@ -52,14 +53,21 @@ lives on `main`, and a worktree copy goes stale.
   `Where` and `Resume` are optional until work starts.
 - **In Progress items** must have `Where` and `Resume`. Link the plan folder
   when one exists (see the `plan-tracking` skill).
-- **Waiting items** must have a `Waiting on` line and a `Revisit` line, and
-  keep `Where` and `Resume` if work had started:
-  - `Waiting on:` the one thing that blocks the next step, such as a user
+- **On Hold and Blocked items** must have a `Waiting on` line and a `Revisit`
+  line, and keep `Where` and `Resume` if work had started:
+  - `Waiting on:` the one thing that stops the next step, such as a user
     decision, a market event, an upstream fix, or another item. Name it so
     anyone can check whether it has happened.
   - `Revisit:` a date (`YYYY-MM-DD`) or a checkable trigger, such as "after
     the 2027-02-15 index review" or "when `[trader]` buffer item is Done".
-  Use To Do, not Waiting, when nothing blocks the task and it only lacks time.
+- **On Hold or Blocked:** On Hold is a short pause, expected to clear within
+  days, such as waiting on a user answer, the next trading session, or a
+  sibling item in progress. Blocked is a long pause, for weeks or more or with
+  no date, such as a vendor change, a scheduled index review, or a decision
+  deferred on purpose. When an On Hold item's `Revisit` passes twice without
+  the blocker clearing, move it to Blocked.
+- Use To Do, not On Hold or Blocked, when nothing stops the task and it only
+  lacks time.
 
 ## Lifecycle
 
@@ -70,13 +78,16 @@ stateDiagram-v2
     ToDo --> InProgress: start
     InProgress --> InProgress: status update
     InProgress --> ToDo: pause, nothing blocks it
-    InProgress --> Waiting: blocked on something
-    ToDo --> Waiting: blocked before starting
-    Waiting --> InProgress: blocker cleared
-    Waiting --> ToDo: blocker cleared, not starting now
+    InProgress --> OnHold: short pause
+    InProgress --> Blocked: long pause
+    ToDo --> Blocked: blocked before starting
+    OnHold --> Blocked: pause runs long
+    OnHold --> InProgress: cleared
+    Blocked --> InProgress: cleared
+    Blocked --> ToDo: cleared, not starting now
     InProgress --> Done: complete
     ToDo --> NotWorthIt: drop, with the reason
-    Waiting --> NotWorthIt: drop, with the reason
+    Blocked --> NotWorthIt: drop, with the reason
     Done --> Archive: next month
 ```
 
@@ -91,8 +102,8 @@ stateDiagram-v2
    `updated`. Keep only the current status plus the facts a resumer needs.
    History belongs in the plan's `progress.md` and in git.
 4. **Pause or wait.** If you stop without finishing, keep `Resume` exact. If
-   the task is blocked, move it to Waiting with `Waiting on` and `Revisit`,
-   and add `waiting since` to the stamps. Otherwise move it back to To Do.
+   something stops the task, move it to On Hold or Blocked with `Waiting on`
+   and `Revisit`, and add `on hold since` or `blocked since` to the stamps. Otherwise move it back to To Do.
 5. **Complete.** Move the item to the top of Done. Shrink it to a summary of
    the outcome: what shipped (merge SHA), whether it is deployed, and the plan
    link. Add `completed`.
@@ -103,7 +114,7 @@ stateDiagram-v2
 
 Run `hostname`, then read the Machines section of
 `docs/ai_context/operations.md` to learn what this machine usually does.
-Scan Waiting first: if an item's `Waiting on` has happened or its `Revisit`
+Scan On Hold, then Blocked, first: if an item's `Waiting on` has happened or its `Revisit`
 date has passed, move it to To Do or In Progress, or bump `Revisit` with the
 reason. Then prefer To Do items that fit this machine, and items other items
 depend on.
