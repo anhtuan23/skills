@@ -15,8 +15,8 @@ context.
 ```text
 kanban.md
 ├── ## 🚧 In Progress   tasks someone is working on now
-├── ## 📋 To Do         tasks ready to start, including deferred findings
 ├── ## ⏸️ On Hold       short pauses: started work waiting days, not weeks
+├── ## 📋 To Do         tasks ready to start, including deferred findings
 ├── ## 🚫 Blocked       long pauses: waiting weeks or more, or on an outside party
 ├── ## ✅ Done          tasks completed this month
 └── ## 💰 Not worth it  tasks dropped after a decision, with the reason
