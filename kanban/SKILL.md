@@ -15,7 +15,7 @@ context.
 ```text
 kanban.md
 ├── ## 🚧 Doing         tasks someone is working on now
-├── ## 📅 Scheduled     paused until a set date or event
+├── ## 📅 Scheduled     paused until a set date or event, nearest Revisit first
 ├── ## 📋 To Do         tasks ready to start, including deferred findings
 │   ├── ### Next        up to 10 items, ranked: work on the top one first
 │   └── ### Backlog     everything else, sorted by priority, then size
@@ -82,6 +82,10 @@ lives on `main`, and a worktree copy goes stale.
   can check, not a date. When a Blocked item's trigger gets a date, move it to
   Scheduled. When a Scheduled item reaches its date and still cannot resume,
   set a new date or move it to Blocked.
+- **Scheduled order:** keep Scheduled sorted by `Revisit`, nearest first, so
+  the top item is the next one due. Sort by the first date on the line; for
+  the same date, use the stated time, or the market event's time (ATO 09:15,
+  close 14:45 ICT). Re-sort whenever you add an item or change a `Revisit`.
 - Use To Do, not Scheduled or Blocked, when nothing stops the task and it only
   lacks time.
 
