@@ -34,7 +34,7 @@ diagram is not enough.
 ## How to Build It
 
 - One `.html` file. No build step, no external scripts, fonts, or CDNs, so it
-  opens offline in a browser or VS Code's Simple Browser, and diffs stay
+  opens offline in a browser or VS Code's Integrated Browser (right-click the file, Open in Integrated Browser), and diffs stay
   reviewable.
 - Draw diagrams as inline SVG. Use plain CSS for layout and color. Small inline
   JavaScript is fine for a toggle or step-through, but the page must make sense
