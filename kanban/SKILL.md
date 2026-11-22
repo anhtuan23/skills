@@ -15,9 +15,9 @@ context.
 ```text
 kanban.md
 ├── ## 🚧 In Progress   tasks someone is working on now
-├── ## ⏸️ On Hold       short pauses: started work waiting days, not weeks
+├── ## ⏸️ On Hold       paused until a set date or event
 ├── ## 📋 To Do         tasks ready to start, including deferred findings
-├── ## 🚫 Blocked       long pauses: waiting weeks or more, or on an outside party
+├── ## 🚫 Blocked       waiting with no known resume time
 ├── ## ✅ Done          tasks completed this month
 └── ## 💰 Not worth it  tasks dropped after a decision, with the reason
 docs/kanban/YYYY-MM.md  completed tasks from earlier months
@@ -60,12 +60,13 @@ lives on `main`, and a worktree copy goes stale.
     anyone can check whether it has happened.
   - `Revisit:` a date (`YYYY-MM-DD`) or a checkable trigger, such as "after
     the 2027-02-15 index review" or "when `[trader]` buffer item is Done".
-- **On Hold or Blocked:** On Hold is a short pause, expected to clear within
-  days, such as waiting on a user answer, the next trading session, or a
-  sibling item in progress. Blocked is a long pause, for weeks or more or with
-  no date, such as a vendor change, a scheduled index review, or a decision
-  deferred on purpose. When an On Hold item's `Revisit` passes twice without
-  the blocker clearing, move it to Blocked.
+- **On Hold or Blocked:** On Hold means the resume time is set in advance:
+  `Revisit` is a date, or an event with a known date, such as the next ATO or
+  a scheduled index review. Blocked means waiting with no known resume time,
+  such as a vendor change or an upstream fix; its `Revisit` is a trigger you
+  can check, not a date. When a Blocked item's trigger gets a date, move it to
+  On Hold. When an On Hold item reaches its date and still cannot resume,
+  set a new date or move it to Blocked.
 - Use To Do, not On Hold or Blocked, when nothing stops the task and it only
   lacks time.
 
@@ -78,10 +79,11 @@ stateDiagram-v2
     ToDo --> InProgress: start
     InProgress --> InProgress: status update
     InProgress --> ToDo: pause, nothing blocks it
-    InProgress --> OnHold: short pause
-    InProgress --> Blocked: long pause
+    InProgress --> OnHold: resume time set
+    InProgress --> Blocked: no resume time
     ToDo --> Blocked: blocked before starting
-    OnHold --> Blocked: pause runs long
+    OnHold --> Blocked: date passed, still stuck
+    Blocked --> OnHold: trigger gets a date
     OnHold --> InProgress: cleared
     Blocked --> InProgress: cleared
     Blocked --> ToDo: cleared, not starting now
