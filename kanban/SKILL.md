@@ -17,6 +17,8 @@ kanban.md
 ├── ## 🚧 Doing         tasks someone is working on now
 ├── ## 📅 Scheduled     paused until a set date or event
 ├── ## 📋 To Do         tasks ready to start, including deferred findings
+│   ├── ### Next        up to 10 items, ranked: work on the top one first
+│   └── ### Backlog     everything else, sorted by priority, then size
 ├── ## 🚫 Blocked       waiting with no known resume time
 ├── ## ✅ Done          tasks completed this month
 └── ## 🗑️ Dropped       tasks dropped after a decision, with the reason
@@ -29,8 +31,9 @@ lives on `main`, and a worktree copy goes stale.
 ## Item Format
 
 ```markdown
-- [owner] One-sentence summary of the task. (created YYYY-MM-DD HH:MM ICT on <machine>, <context>)
+- [owner] [P2/M] One-sentence summary of the task. (created YYYY-MM-DD HH:MM ICT on <machine>, <context>)
   - Why or evidence: what prompted it, with file paths, commits, or research notes.
+  - Depends on: `[owner] summary start` of the item that must finish first.
   - Status (YYYY-MM-DD HH:MM ICT): current state and the next step.
   - Where: machine `<machine>`, branch `<branch>`, worktree `<path>`.
   - Resume: `cd <path> && cat docs/plans/YYMM/DDHHMM-<name>/progress.md`.
@@ -38,6 +41,14 @@ lives on `main`, and a worktree copy goes stale.
 
 - **Owner tag:** the service or area, in square brackets, such as `[trader]`,
   `[fetch]`, or `[deploy]`.
+- **Priority and size tag:** in square brackets after the owner, as
+  `[<priority>/<size>]`. Every item in Doing, Scheduled, To Do, and Blocked
+  has one.
+  - `P1`: protects money or correctness in live trading, or other items wait
+    on it. `P2`: worth doing this month. `P3`: nice to have, someday.
+  - `S`: under about an hour. `M`: about one session. `L`: several sessions,
+    needs a plan (see the `plan-tracking` skill).
+  - Guess when unsure and fix the tag later; a rough tag beats none.
 - **Summary:** state the task or the problem, not the activity. "Auction
   writes pay DNS+TCP+TLS on almost every order" is better than "look at
   latency".
@@ -49,6 +60,10 @@ lives on `main`, and a worktree copy goes stale.
   `TZ=Asia/Ho_Chi_Minh date '+%Y-%m-%d %H:%M ICT'`. Add `started`, `updated`,
   and `completed` to the same parentheses as they happen, so the stamps stay
   together.
+- **Depends on:** add one line per item that must finish first, quoting the
+  start of its summary so a search finds it. Leave it out when nothing must
+  finish first. Do not use it for a wait on something outside the board; that
+  is `Waiting on`.
 - **To Do items** need the summary, origin, and enough context to act on later.
   `Where` and `Resume` are optional until work starts.
 - **Doing items** must have `Where` and `Resume`. Link the plan folder
@@ -108,7 +123,9 @@ stateDiagram-v2
    and `Revisit`, and add `scheduled since` or `blocked since` to the stamps. Otherwise move it back to To Do.
 5. **Complete.** Move the item to the top of Done. Shrink it to a summary of
    the outcome: what shipped (merge SHA), whether it is deployed, and the plan
-   link. Add `completed`.
+   link. Add `completed`. Search the board for `Depends on` lines that quote
+   this item and remove them; if one of those items was Blocked on it, move
+   it to To Do.
 6. **Drop.** Move a task you decide not to do to Dropped, with a
    `Dropped (timestamp):` line that says why.
 
@@ -116,10 +133,16 @@ stateDiagram-v2
 
 Run `hostname`, then read the Machines section of
 `docs/ai_context/operations.md` to learn what this machine usually does.
-Sca Scheduled, then Blocked, first: if an item's `Waiting on` has happened or its `Revisit`
-date has passed, move it to To Do or Doing, or bump `Revisit` with the
-reason. Then prefer To Do items that fit this machine, and items other items
-depend on.
+Scan Scheduled, then Blocked, first: if an item's `Waiting on` has happened
+or its `Revisit` date has passed, move it to To Do or Doing, or bump `Revisit`
+with the reason. Then take the highest item in Next that fits this machine and
+has no open `Depends on`.
+
+**Keeping Next ranked.** Next holds at most 10 items, ranked by the human. An
+agent may add a new `P1` item to Next, at the bottom, and say so in its final
+response; any other change to the order needs the human. When Next has fewer
+than 5 items, propose candidates from Backlog to the human. Keep Backlog
+sorted by priority, then size, so the small high-value work is on top.
 
 ## Commit and Push
 
