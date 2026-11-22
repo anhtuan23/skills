@@ -10,6 +10,7 @@ Agent skills for Claude Code, Codex, OpenCode, and compatible agents.
 | `worktree-ship` | Develop in parallel worktrees, ship whole or partial features to main with rebase and --no-ff merge, deploy to production over SSH |
 | `commit-msg` | Suggest conventional commit messages for staged changes |
 | `complexity-combat` | Scan for over-engineered code, categorize, and ask human which problems are real before simplifying |
+| `explainer-page` | Write a static HTML page that explains a hard concept with diagrams |
 | `plan-tracking` | Track implementation plans with structured progress and review artifacts |
 | `function-ordering` | Reorder functions within a file for better readability |
 | `python-interactive` | Set up Python files for cell-by-cell execution in VS Code's Interactive window |

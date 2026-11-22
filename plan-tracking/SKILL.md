@@ -23,6 +23,7 @@ Required files:
 docs/plans/YYMM/DDHHMM-{name}/
 ├── plan.md              # source of truth
 ├── progress.md          # current status for resumption
+├── explainer.html       # optional visual explainer (see below)
 ├── review/
 │   ├── plan-01.md       # first plan review
 │   ├── plan-02.md       # second plan review (if needed)
@@ -33,6 +34,14 @@ docs/plans/YYMM/DDHHMM-{name}/
 └── sub-plans/
     └── DDHHMM-{sub-name}/  # same structure as main plan
 ```
+
+## Explainer Page
+
+When the plan involves a concept that prose explains poorly, add an optional
+`explainer.html` next to `plan.md` using the `explainer-page` skill, and link it
+near the top of `plan.md`. `plan.md` stays the source of truth. Inside the
+Markdown files, prefer Mermaid diagrams over long prose for flows, sequences,
+and state machines.
 
 ## Subplans
 
