@@ -15,8 +15,10 @@ context.
 ```text
 kanban.md
 ├── ## 🚧 In Progress   tasks someone is working on now
-├── ## 📋 To Do         tasks waiting to start, including deferred findings
-└── ## ✅ Done          tasks completed this month
+├── ## 📋 To Do         tasks ready to start, including deferred findings
+├── ## ⏳ Waiting       tasks that cannot continue until something happens
+├── ## ✅ Done          tasks completed this month
+└── ## 💰 Not worth it  tasks dropped after a decision, with the reason
 docs/kanban/YYYY-MM.md  completed tasks from earlier months
 ```
 
@@ -50,6 +52,14 @@ lives on `main`, and a worktree copy goes stale.
   `Where` and `Resume` are optional until work starts.
 - **In Progress items** must have `Where` and `Resume`. Link the plan folder
   when one exists (see the `plan-tracking` skill).
+- **Waiting items** must have a `Waiting on` line and a `Revisit` line, and
+  keep `Where` and `Resume` if work had started:
+  - `Waiting on:` the one thing that blocks the next step, such as a user
+    decision, a market event, an upstream fix, or another item. Name it so
+    anyone can check whether it has happened.
+  - `Revisit:` a date (`YYYY-MM-DD`) or a checkable trigger, such as "after
+    the 2027-02-15 index review" or "when `[trader]` buffer item is Done".
+  Use To Do, not Waiting, when nothing blocks the task and it only lacks time.
 
 ## Lifecycle
 
@@ -59,9 +69,14 @@ stateDiagram-v2
     [*] --> InProgress: create and start now
     ToDo --> InProgress: start
     InProgress --> InProgress: status update
-    InProgress --> ToDo: pause
+    InProgress --> ToDo: pause, nothing blocks it
+    InProgress --> Waiting: blocked on something
+    ToDo --> Waiting: blocked before starting
+    Waiting --> InProgress: blocker cleared
+    Waiting --> ToDo: blocker cleared, not starting now
     InProgress --> Done: complete
-    ToDo --> Done: cancel, with the reason
+    ToDo --> NotWorthIt: drop, with the reason
+    Waiting --> NotWorthIt: drop, with the reason
     Done --> Archive: next month
 ```
 
@@ -75,17 +90,23 @@ stateDiagram-v2
    human, merged, or deployed, edit the item's `Status` line in place and bump
    `updated`. Keep only the current status plus the facts a resumer needs.
    History belongs in the plan's `progress.md` and in git.
-4. **Pause.** If you stop without finishing, keep `Resume` exact and say what
-   it waits on.
+4. **Pause or wait.** If you stop without finishing, keep `Resume` exact. If
+   the task is blocked, move it to Waiting with `Waiting on` and `Revisit`,
+   and add `waiting since` to the stamps. Otherwise move it back to To Do.
 5. **Complete.** Move the item to the top of Done. Shrink it to a summary of
    the outcome: what shipped (merge SHA), whether it is deployed, and the plan
-   link. Add `completed`. A cancelled item says why it was not worth doing.
+   link. Add `completed`.
+6. **Drop.** Move a task you decide not to do to Not worth it, with a
+   `Not worth it (timestamp):` line that says why.
 
 ## Choosing What to Do Next
 
 Run `hostname`, then read the Machines section of
 `docs/ai_context/operations.md` to learn what this machine usually does.
-Prefer To Do items that fit it, and items other items depend on.
+Scan Waiting first: if an item's `Waiting on` has happened or its `Revisit`
+date has passed, move it to To Do or In Progress, or bump `Revisit` with the
+reason. Then prefer To Do items that fit this machine, and items other items
+depend on.
 
 ## Commit and Push
 
