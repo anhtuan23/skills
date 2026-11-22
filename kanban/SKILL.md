@@ -33,7 +33,7 @@ lives on `main`, and a worktree copy goes stale.
 ```markdown
 - [owner] [P2/M] One-sentence summary of the task. (created YYYY-MM-DD HH:MM ICT on <machine>, <context>)
   - Why or evidence: what prompted it, with file paths, commits, or research notes.
-  - Depends on: `[owner] summary start` of the item that must finish first.
+  - Depends on: `Summary start` of the item that must finish first.
   - Status (YYYY-MM-DD HH:MM ICT): current state and the next step.
   - Where: machine `<machine>`, branch `<branch>`, worktree `<path>`.
   - Resume: `cd <path> && cat docs/plans/YYMM/DDHHMM-<name>/progress.md`.
@@ -61,7 +61,7 @@ lives on `main`, and a worktree copy goes stale.
   and `completed` to the same parentheses as they happen, so the stamps stay
   together.
 - **Depends on:** add one line per item that must finish first, quoting the
-  start of its summary so a search finds it. Leave it out when nothing must
+  start of its summary text, without the tags, so a search finds it. Leave it out when nothing must
   finish first. Do not use it for a wait on something outside the board; that
   is `Waiting on`.
 - **To Do items** need the summary, origin, and enough context to act on later.
