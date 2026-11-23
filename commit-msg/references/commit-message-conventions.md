@@ -6,7 +6,8 @@ This reference explains the conventions used by `commit-msg`.
 
 - Use a Conventional Commits style prefix:
   `type(scope): short subject`
-- Scope is optional and should be short, stable, and codebase-oriented.
+- Scope is optional and should be short, stable, and codebase-oriented. Reuse
+  the scope names already in the repo's history.
 - Keep the subject under 60 characters for scanability in logs and review
   tools.
 - Write the subject in imperative mood such as `add`, `fix`, `refactor`,
@@ -15,7 +16,9 @@ This reference explains the conventions used by `commit-msg`.
 - For breaking changes, append `!` before the colon:
   `feat(api)!: remove deprecated endpoint`
 
-## Allowed Types
+## Default Types
+
+A repository's own rules, history, or commitlint config override this list.
 
 - `feat`: adds a user-facing or developer-facing feature
 - `fix`: corrects a bug or incorrect behavior

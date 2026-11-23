@@ -8,7 +8,7 @@ Agent skills for Claude Code, Codex, OpenCode, and compatible agents.
 |-------|-------------|
 | `git-reconcile` | Reconcile advanced Git merge and rebase conflicts from base, intent, and behavioral evidence |
 | `worktree-ship` | Develop in parallel worktrees, ship whole or partial features to main with rebase and --no-ff merge, deploy to production over SSH |
-| `commit-msg` | Suggest conventional commit messages for staged changes |
+| `commit-msg` | Write conventional commit messages that follow each repo's own conventions, one per logical change |
 | `complexity-combat` | Scan for over-engineered code, categorize, and ask human which problems are real before simplifying |
 | `explainer-page` | Write a static HTML page that explains a hard concept with diagrams |
 | `plan-tracking` | Track implementation plans with structured progress and review artifacts |
