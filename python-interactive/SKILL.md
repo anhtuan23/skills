@@ -31,7 +31,7 @@ import sys
 PROJECT_ROOT = Path(__file__).resolve().parents[N]
 
 if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+    sys.path.append(str(PROJECT_ROOT))
 ```
 
 Never hard-code an absolute checkout path: it puts the main checkout first on
