@@ -151,8 +151,8 @@ sorted by priority, then size, so the small high-value work is on top.
 ## Commit and Push
 
 Commit and push the board as soon as task state changes, so other machines see
-it. Agents may push `kanban.md` to `main` without asking. Commit nothing else
-in the same commit.
+it. Agents may push `kanban.md` to `main` without asking, as well as
+documentation-only changes. Keep the board in its own commit.
 
 ```bash
 cd <main checkout>
